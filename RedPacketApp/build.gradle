@@ -57,10 +57,6 @@ android {
         }
     }
 
-    productFlavors {
-    }
-
-
     buildTypes {
         debug {
             debuggable true
@@ -70,14 +66,9 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             // 设置那个版本
             buildConfigField "int", "VERSION_TYPE", VERSION_DEVELOP
-            // 广告信息
-            buildConfigField "String", "BAIDU_AD_SPLASH", DEVELOP_BAIDU_AD_SPLASH
-            buildConfigField "String", "BAIDU_AD_BANNER", DEVELOP_BAIDU_AD_BANNER
-            buildConfigField "String", "BAIDU_AD_VIDEO", DEVELOP_BAIDU_AD_VIDEO
+
             // AndroidManifest 中配置的文件
             manifestPlaceholders = [
-                    // 广告的ID
-                    BAIDU_AD_ID             : DEVELOP_BAIDU_AD_ID,
                     // 百度统计渠道
                     BAIDU_STATISTICS_ID     : DEVELOP_BAIDU_STATISTICS_ID,
                     BAIDU_STATISTICS_CHANNEL: DEVELOP_BAIDU_STATISTICS_CHANNEL]
@@ -89,14 +80,9 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             // 设置那个版本
             buildConfigField "int", "VERSION_TYPE", VERSION_RELEASE
-            // 广告信息
-            buildConfigField "String", "BAIDU_AD_SPLASH", RELEASE_BAIDU_AD_SPLASH
-            buildConfigField "String", "BAIDU_AD_BANNER", RELEASE_BAIDU_AD_BANNER
-            buildConfigField "String", "BAIDU_AD_VIDEO", RELEASE_BAIDU_AD_VIDEO
+
             // AndroidManifest 中配置的文件
             manifestPlaceholders = [
-                    // 广告的ID
-                    BAIDU_AD_ID             : RELEASE_BAIDU_AD_ID,
                     // 百度统计渠道
                     BAIDU_STATISTICS_ID     : RELEASE_BAIDU_STATISTICS_ID,
                     // 百度统计渠道
@@ -106,7 +92,7 @@ android {
                 variant.outputs.each { output ->
                     def outputFile = output.outputFile
                     if (outputFile != null && outputFile.name.endsWith('release.apk')) {
-                        def fileName = "PILIFE_V${defaultConfig.versionName}_${releaseTime()}.apk"
+                        def fileName = "RedPacket_V${defaultConfig.versionName}_${releaseTime()}.apk"
                         output.outputFile = new File(outputFile.parent, fileName)
                     }
                 }

@@ -1,4 +1,20 @@
-package com.yuhaiyang.redpacket;
+/**
+ * Copyright (C) 2016 The yuhaiyang Android Source Project
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package com.yuhaiyang.redpacket.ui.activity;
 
 import android.annotation.TargetApi;
 import android.app.Dialog;
@@ -26,7 +42,12 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
-import com.yuhaiyang.redpacket.job.WechatAccessbilityJob;
+import com.yuhaiyang.redpacket.Config;
+import com.yuhaiyang.redpacket.ui.RedPacketApplication;
+import com.yuhaiyang.redpacket.R;
+import com.yuhaiyang.redpacket.job.WechatIAccessbilityJob;
+import com.yuhaiyang.redpacket.ui.fragment.BaseSettingsFragment;
+import com.yuhaiyang.redpacket.ui.service.QiangHongBaoService;
 import com.yuhaiyang.redpacket.util.BitmapUtils;
 
 import java.io.File;
@@ -56,7 +77,7 @@ public class MainActivity extends BaseSettingsActivity {
 
         setTitle(getString(R.string.app_name) + version);
 
-        QHBApplication.activityStartMain(this);
+        RedPacketApplication.activityStartMain(this);
 
         IntentFilter filter = new IntentFilter();
         filter.addAction(Config.ACTION_QIANGHONGBAO_SERVICE_CONNECT);
@@ -154,15 +175,15 @@ public class MainActivity extends BaseSettingsActivity {
         switch (item.getItemId()) {
             case 0:
                 openAccessibilityServiceSettings();
-                QHBApplication.eventStatistics(this, "menu_service");
+                RedPacketApplication.eventStatistics(this, "menu_service");
                 return true;
             case 3:
                 openNotificationServiceSettings();
-                QHBApplication.eventStatistics(this, "menu_notify");
+                RedPacketApplication.eventStatistics(this, "menu_notify");
                 break;
             case 4:
                 startActivity(new Intent(this, AboutMeActivity.class));
-                QHBApplication.eventStatistics(this, "menu_about");
+                RedPacketApplication.eventStatistics(this, "menu_about");
                 break;
         }
         return super.onOptionsItemSelected(item);
@@ -178,14 +199,14 @@ public class MainActivity extends BaseSettingsActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 Config.getConfig(getApplicationContext()).setAgreement(true);
-                QHBApplication.eventStatistics(MainActivity.this, "agreement", "true");
+                RedPacketApplication.eventStatistics(MainActivity.this, "agreement", "true");
             }
         });
         builder.setNegativeButton("不同意", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 Config.getConfig(getApplicationContext()).setAgreement(false);
-                QHBApplication.eventStatistics(MainActivity.this, "agreement", "false");
+                RedPacketApplication.eventStatistics(MainActivity.this, "agreement", "false");
                 finish();
             }
         });
@@ -194,7 +215,7 @@ public class MainActivity extends BaseSettingsActivity {
 
     /** 分享*/
     private void showShareDialog() {
-        QHBApplication.showShare(this);
+        RedPacketApplication.showShare(this);
     }
 
     /** 二维码*/
@@ -205,13 +226,13 @@ public class MainActivity extends BaseSettingsActivity {
             @Override
             public void onClick(View v) {
                 String id = getString(R.string.qr_wx_id);
-                ClipboardManager clipboardManager = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+                ClipboardManager clipboardManager = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
                 ClipData clip = ClipData.newPlainText("label", id);
                 clipboardManager.setPrimaryClip(clip);
 
                 //跳到微信
                 Intent wxIntent = getPackageManager().getLaunchIntentForPackage(
-                        WechatAccessbilityJob.WECHAT_PACKAGENAME);
+                        WechatIAccessbilityJob.WECHAT_PACKAGENAME);
                 if(wxIntent != null) {
                     try {
                         startActivity(wxIntent);
@@ -219,7 +240,7 @@ public class MainActivity extends BaseSettingsActivity {
                 }
 
                 Toast.makeText(getApplicationContext(), "已复制到粘贴板", Toast.LENGTH_LONG).show();
-                QHBApplication.eventStatistics(MainActivity.this, "copy_qr");
+                RedPacketApplication.eventStatistics(MainActivity.this, "copy_qr");
                 dialog.dismiss();
             }
         });
@@ -346,7 +367,7 @@ public class MainActivity extends BaseSettingsActivity {
                         ((MainActivity)getActivity()).openNotificationServiceSettings();
                         return false;
                     }
-                    QHBApplication.eventStatistics(getActivity(), "notify_service", String.valueOf(newValue));
+                    RedPacketApplication.eventStatistics(getActivity(), "notify_service", String.valueOf(newValue));
                     return true;
                 }
             });
@@ -357,7 +378,7 @@ public class MainActivity extends BaseSettingsActivity {
                     @Override
                     public boolean onPreferenceClick(Preference preference) {
                         ((MainActivity) getActivity()).showQrDialog();
-                        QHBApplication.eventStatistics(getActivity(), "about_author");
+                        RedPacketApplication.eventStatistics(getActivity(), "about_author");
                         return true;
                     }
                 });
@@ -369,7 +390,7 @@ public class MainActivity extends BaseSettingsActivity {
                     @Override
                     public boolean onPreferenceClick(Preference preference) {
                         ((MainActivity) getActivity()).showDonateDialog();
-                        QHBApplication.eventStatistics(getActivity(), "donate");
+                        RedPacketApplication.eventStatistics(getActivity(), "donate");
                         return true;
                     }
                 });
@@ -401,7 +422,7 @@ public class MainActivity extends BaseSettingsActivity {
             boolean running = QiangHongBaoService.isNotificationServiceRunning();
             boolean enable = Config.getConfig(getActivity()).isEnableNotificationService();
             if( enable && running && !notificationPref.isChecked()) {
-                QHBApplication.eventStatistics(getActivity(), "notify_service", String.valueOf(true));
+                RedPacketApplication.eventStatistics(getActivity(), "notify_service", String.valueOf(true));
                 notificationChangeByUser = false;
                 notificationPref.setChecked(true);
             } else if((!enable || !running) && notificationPref.isChecked()) {

@@ -1,4 +1,20 @@
-package com.yuhaiyang.redpacket;
+/**
+ * Copyright (C) 2016 The yuhaiyang Android Source Project
+ * <p/>
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * <p/>
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * <p/>
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package com.yuhaiyang.redpacket.ui.activity;
 
 import android.app.Fragment;
 import android.os.Bundle;
@@ -6,13 +22,11 @@ import android.preference.EditTextPreference;
 import android.preference.ListPreference;
 import android.preference.Preference;
 
-/**
- * <p>Created 16/2/5 下午12:57.</p>
- * <p><a href="mailto:codeboy2013@gmail.com">Email:codeboy2013@gmail.com</a></p>
- * <p><a href="http://www.happycodeboy.com">LeonLee Blog</a></p>
- *
- * @author LeonLee
- */
+import com.yuhaiyang.redpacket.Config;
+import com.yuhaiyang.redpacket.ui.RedPacketApplication;
+import com.yuhaiyang.redpacket.R;
+import com.yuhaiyang.redpacket.ui.fragment.BaseSettingsFragment;
+
 public class WechatSettingsActivity extends BaseSettingsActivity {
 
     @Override
@@ -34,7 +48,7 @@ public class WechatSettingsActivity extends BaseSettingsActivity {
                 public boolean onPreferenceChange(Preference preference, Object newValue) {
                     int value = Integer.parseInt(String.valueOf(newValue));
                     preference.setSummary(wxMode.getEntries()[value]);
-                    QHBApplication.eventStatistics(getActivity(), "wx_mode", String.valueOf(newValue));
+                    RedPacketApplication.eventStatistics(getActivity(), "wx_mode", String.valueOf(newValue));
                     return true;
                 }
             });
@@ -47,7 +61,7 @@ public class WechatSettingsActivity extends BaseSettingsActivity {
                 public boolean onPreferenceChange(Preference preference, Object newValue) {
                     int value = Integer.parseInt(String.valueOf(newValue));
                     preference.setSummary(wxAfterOpenPre.getEntries()[value]);
-                    QHBApplication.eventStatistics(getActivity(), "wx_after_open", String.valueOf(newValue));
+                    RedPacketApplication.eventStatistics(getActivity(), "wx_after_open", String.valueOf(newValue));
                     return true;
                 }
             });
@@ -60,7 +74,7 @@ public class WechatSettingsActivity extends BaseSettingsActivity {
                 public boolean onPreferenceChange(Preference preference, Object newValue) {
                     int value = Integer.parseInt(String.valueOf(newValue));
                     preference.setSummary(wxAfterGetPre.getEntries()[value]);
-                    QHBApplication.eventStatistics(getActivity(), "wx_after_get", String.valueOf(newValue));
+                    RedPacketApplication.eventStatistics(getActivity(), "wx_after_get", String.valueOf(newValue));
                     return true;
                 }
             });
@@ -70,20 +84,20 @@ public class WechatSettingsActivity extends BaseSettingsActivity {
             delayEditTextPre.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
                 @Override
                 public boolean onPreferenceChange(Preference preference, Object newValue) {
-                    if("0".equals(String.valueOf(newValue))) {
+                    if ("0".equals(String.valueOf(newValue))) {
                         preference.setSummary("");
                     } else {
                         preference.setSummary("已延时" + newValue + "毫秒");
                     }
-                    QHBApplication.eventStatistics(getActivity(), "wx_delay_time", String.valueOf(newValue));
+                    RedPacketApplication.eventStatistics(getActivity(), "wx_delay_time", String.valueOf(newValue));
                     return true;
                 }
             });
             String delay = delayEditTextPre.getText();
-            if("0".equals(String.valueOf(delay))) {
+            if ("0".equals(String.valueOf(delay))) {
                 delayEditTextPre.setSummary("");
             } else {
-                delayEditTextPre.setSummary("已延时" + delay  + "毫秒");
+                delayEditTextPre.setSummary("已延时" + delay + "毫秒");
             }
         }
     }

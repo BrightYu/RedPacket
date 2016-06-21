@@ -1,4 +1,20 @@
-package com.yuhaiyang.redpacket;
+/**
+ * Copyright (C) 2016 The yuhaiyang Android Source Project
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package com.yuhaiyang.redpacket.ui.service;
 
 import android.accessibilityservice.AccessibilityService;
 import android.accessibilityservice.AccessibilityServiceInfo;
@@ -11,8 +27,11 @@ import android.view.accessibility.AccessibilityEvent;
 import android.view.accessibility.AccessibilityManager;
 import android.widget.Toast;
 
-import com.yuhaiyang.redpacket.job.AccessbilityJob;
-import com.yuhaiyang.redpacket.job.WechatAccessbilityJob;
+import com.yuhaiyang.redpacket.BuildConfig;
+import com.yuhaiyang.redpacket.Config;
+import com.yuhaiyang.redpacket.IStatusBarNotification;
+import com.yuhaiyang.redpacket.job.IAccessbilityJob;
+import com.yuhaiyang.redpacket.job.WechatIAccessbilityJob;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -30,13 +49,13 @@ public class QiangHongBaoService extends AccessibilityService {
     private static final String TAG = "QiangHongBao";
 
     private static final Class[] ACCESSBILITY_JOBS= {
-            WechatAccessbilityJob.class,
+            WechatIAccessbilityJob.class,
     };
 
     private static QiangHongBaoService service;
 
-    private List<AccessbilityJob> mAccessbilityJobs;
-    private HashMap<String, AccessbilityJob> mPkgAccessbilityJobMap;
+    private List<IAccessbilityJob> mAccessbilityJobs;
+    private HashMap<String, IAccessbilityJob> mPkgAccessbilityJobMap;
 
     @Override
     public void onCreate() {
@@ -49,8 +68,8 @@ public class QiangHongBaoService extends AccessibilityService {
         for(Class clazz : ACCESSBILITY_JOBS) {
             try {
                 Object object = clazz.newInstance();
-                if(object instanceof AccessbilityJob) {
-                    AccessbilityJob job = (AccessbilityJob) object;
+                if(object instanceof IAccessbilityJob) {
+                    IAccessbilityJob job = (IAccessbilityJob) object;
                     job.onCreateJob(this);
                     mAccessbilityJobs.add(job);
                     mPkgAccessbilityJobMap.put(job.getTargetPackageName(), job);
@@ -69,7 +88,7 @@ public class QiangHongBaoService extends AccessibilityService {
             mPkgAccessbilityJobMap.clear();
         }
         if(mAccessbilityJobs != null && !mAccessbilityJobs.isEmpty()) {
-            for (AccessbilityJob job : mAccessbilityJobs) {
+            for (IAccessbilityJob job : mAccessbilityJobs) {
                 job.onStopJob();
             }
             mAccessbilityJobs.clear();
@@ -109,7 +128,7 @@ public class QiangHongBaoService extends AccessibilityService {
             if(!getConfig().isAgreement()) {
                 return;
             }
-            for (AccessbilityJob job : mAccessbilityJobs) {
+            for (IAccessbilityJob job : mAccessbilityJobs) {
                 if(pkn.equals(job.getTargetPackageName()) && job.isEnable()) {
                     job.onReceiveJob(event);
                 }
@@ -131,7 +150,7 @@ public class QiangHongBaoService extends AccessibilityService {
             return;
         }
         String pack = notificationService.getPackageName();
-        AccessbilityJob job = service.mPkgAccessbilityJobMap.get(pack);
+        IAccessbilityJob job = service.mPkgAccessbilityJobMap.get(pack);
         if(job == null) {
             return;
         }

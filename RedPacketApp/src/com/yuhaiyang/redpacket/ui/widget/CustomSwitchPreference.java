@@ -1,4 +1,4 @@
-package com.yuhaiyang.redpacket.widget;
+package com.yuhaiyang.redpacket.ui.widget;
 
 import android.content.Context;
 import android.os.Build;
