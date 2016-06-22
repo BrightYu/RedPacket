@@ -35,7 +35,6 @@ public class RedPacketActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        RedPacketApplication.activityCreateStatistics(this);
         resetStatusBar();
     }
 
@@ -49,7 +48,6 @@ public class RedPacketActivity extends BaseActivity {
         super.onResume();
         // 百度统计
         StatService.onResume(this);
-        RedPacketApplication.activityResumeStatistics(this);
     }
 
     @Override
@@ -57,7 +55,6 @@ public class RedPacketActivity extends BaseActivity {
         super.onPause();
         // 百度统计
         StatService.onPause(this);
-        RedPacketApplication.activityPauseStatistics(this);
     }
 
 

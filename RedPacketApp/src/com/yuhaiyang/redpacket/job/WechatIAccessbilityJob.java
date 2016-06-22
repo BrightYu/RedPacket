@@ -20,7 +20,6 @@ import android.view.accessibility.AccessibilityNodeInfo;
 import com.yuhaiyang.redpacket.BuildConfig;
 import com.yuhaiyang.redpacket.Config;
 import com.yuhaiyang.redpacket.IStatusBarNotification;
-import com.yuhaiyang.redpacket.ui.RedPacketApplication;
 import com.yuhaiyang.redpacket.ui.service.QiangHongBaoService;
 import com.yuhaiyang.redpacket.util.AccessibilityHelper;
 import com.yuhaiyang.redpacket.util.NotifyHelper;
@@ -320,11 +319,7 @@ public class WechatIAccessbilityJob extends BaseIAccessbilityJob {
             } else {
                 AccessibilityHelper.performClick(n);
             }
-            if (event == Config.WX_AFTER_OPEN_HONGBAO) {
-                RedPacketApplication.eventStatistics(getContext(), "open_hongbao");
-            } else {
-                RedPacketApplication.eventStatistics(getContext(), "open_see");
-            }
+
         }
     }
 

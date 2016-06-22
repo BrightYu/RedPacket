@@ -40,8 +40,6 @@
 
         <!-- 标题栏颜色 -->
         <item name="colorPrimary">@color/color_primary</item>
-        <!-- 图标颜色 仅适用于V7的ToolBar-->
-        <item name="colorControlNormal">@android:color/white</item>
         <!--  TopBar 的style -->
         <item name="topbarStyle">@style/TopBar</item>
         <!-- 间隔线，暂时不进行设置 -->

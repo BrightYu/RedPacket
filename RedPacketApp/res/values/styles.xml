@@ -10,4 +10,25 @@
         <item name="android:backgroundDimEnabled">true</item>
     </style>
 
+    <style name="ActionBar" parent="@style/Widget.AppCompat.ActionBar.Solid">
+        <item name="elevation">0dp</item>
+    </style>
+
+    <style name="SwitchButtonStyle">
+        <item name="android:paddingLeft">10dp</item>
+        <item name="android:paddingRight">10dp</item>
+        <item name="android:paddingTop">4dp</item>
+        <item name="android:paddingBottom">4dp</item>
+    </style>
+
+    <style name="TextView.Main" />
+
+    <style name="TextView.Main.Tip">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">@dimen/dp_30</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:paddingStart">@dimen/dp_10</item>
+        <item name="android:textColor">@color/text_color_normal</item>
+    </style>
+
 </resources>
