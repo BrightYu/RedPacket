@@ -14,12 +14,21 @@
         style="@style/TextView.Main.Tip"
         android:text="@string/platform" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@android:color/white"
-        android:minHeight="@dimen/girdle_min_h"
-        android:orientation="horizontal">
+    <LinearLayout style="@style/LinearLayout.Main.Item">
+
+        <ImageView
+            android:layout_width="@dimen/dp_35"
+            android:layout_height="@dimen/dp_35"
+            android:scaleType="centerInside"
+            android:src="@drawable/ic_wechat_friend_normal" />
+
+        <TextView
+            style="@style/TextView.Main.Title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:padding="@dimen/gap_grade_3"
+            android:text="@string/wechat" />
 
         <com.bright.common.widget.SwitchButton
             android:id="@+id/name"
@@ -36,6 +45,24 @@
     <TextView
         style="@style/TextView.Main.Tip"
         android:text="@string/platform_settings" />
+
+    <LinearLayout
+        android:id="@+id/wechat_setting"
+        style="@style/LinearLayout.Main.Item.Vertical"
+        android:orientation="vertical">
+
+        <TextView
+            style="@style/TextView.Main.Title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/wechat_settings" />
+
+        <TextView
+            style="@style/TextView.Main.SubTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/wechat_settings" />
+    </LinearLayout>
 
     <TextView
         style="@style/TextView.Main.Tip"

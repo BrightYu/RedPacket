@@ -21,6 +21,31 @@
         <item name="android:paddingBottom">4dp</item>
     </style>
 
+    <style name="LinearLayout" />
+
+    <style name="LinearLayout.Main" />
+
+    <style name="LinearLayout.Main.Item">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:background">@android:color/white</item>
+        <item name="android:minHeight">@dimen/dp_60</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:orientation">horizontal</item>
+        <item name="android:paddingEnd">@dimen/gap_grade_2</item>
+        <item name="android:paddingStart">@dimen/gap_grade_5</item>
+    </style>
+
+    <style name="LinearLayout.Main.Item.Vertical">
+        <item name="android:orientation">vertical</item>
+        <item name="android:paddingEnd">@dimen/gap_grade_2</item>
+        <item name="android:paddingStart">@dimen/gap_grade_5</item>
+    </style>
+
+    <style name="LinearLayout.Main.Item.Horizontal">
+        <item name="android:orientation">horizontal</item>
+    </style>
+
     <style name="TextView.Main" />
 
     <style name="TextView.Main.Tip">
@@ -28,7 +53,20 @@
         <item name="android:layout_height">@dimen/dp_30</item>
         <item name="android:gravity">center_vertical</item>
         <item name="android:paddingStart">@dimen/dp_10</item>
+        <item name="android:textSize">@dimen/I_title</item>
         <item name="android:textColor">@color/text_color_normal</item>
+    </style>
+
+    <style name="TextView.Main.Title">
+        <item name="android:textSize">@dimen/H_title</item>
+        <item name="android:textColor">@color/text_color_normal</item>
+    </style>
+
+    <style name="TextView.Main.SubTitle">
+        <item name="android:textSize">@dimen/I_title</item>
+        <item name="android:paddingTop">@dimen/dp_2</item>
+        <item name="android:paddingStart">@dimen/dp_1</item>
+        <item name="android:textColor">@color/text_color_light_normal</item>
     </style>
 
 </resources>

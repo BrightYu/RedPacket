@@ -5,7 +5,7 @@
 
         <com.yuhaiyang.redpacket.ui.widget.CustomSwitchPreference
             android:defaultValue="true"
-            android:icon="@drawable/settings_ic_wechat"
+            android:icon="@drawable/ic_wechat"
             android:key="KEY_ENABLE_WECHAT"
             android:title="微信" />
 
