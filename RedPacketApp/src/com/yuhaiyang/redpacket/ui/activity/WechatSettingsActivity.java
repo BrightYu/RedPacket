@@ -76,6 +76,9 @@ public class WechatSettingsActivity extends RedPacketActivity implements View.On
             case R.id.grab_mode:
                 showGrapModeDialog();
                 break;
+            case R.id.grab_delay_time:
+                showDelayTimeDialog();
+                break;
             case R.id.open_after_doing:
                 showOpenAfterActionDialog();
                 break;
@@ -96,6 +99,15 @@ public class WechatSettingsActivity extends RedPacketActivity implements View.On
 
             }
         });
+        builder.setNegativeButton(R.string.cancel, null);
+        builder.create().show();
+    }
+
+    private void showDelayTimeDialog() {
+        BaseDialog.Builder builder = new BaseDialog.Builder(this, R.style.Dialog_SingleChoice);
+        builder.setTitle(R.string.set_delay_time_title);
+        View view = getLayoutInflater().inflate(R.layout.dialog_delay_time, null);
+        builder.setView(view);
         builder.setNegativeButton(R.string.cancel, null);
         builder.create().show();
     }

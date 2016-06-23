@@ -17,6 +17,8 @@
 <resources>
 
     <attr name="hasSwitch" format="boolean" />
+    <attr name="normalColor" format="color" />
+    <attr name="focusColor" format="color" />
     <declare-styleable name="NormalPreference">
         <attr name="hasSwitch" />
         <attr name="text" />
@@ -27,5 +29,13 @@
         <attr name="subTextSize" />
         <attr name="subTextColor" />
         <attr name="android:minHeight" />
+    </declare-styleable>
+
+    <declare-styleable name="InputEdit">
+        <attr name="tip" />
+        <attr name="hint" />
+        <attr name="normalColor" />
+        <attr name="focusColor" />
+        <attr name="android:inputType" />
     </declare-styleable>
 </resources>
