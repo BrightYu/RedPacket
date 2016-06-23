@@ -32,8 +32,7 @@
         <item name="android:minHeight">@dimen/dp_60</item>
         <item name="android:gravity">center_vertical</item>
         <item name="android:orientation">horizontal</item>
-        <item name="android:paddingEnd">@dimen/gap_grade_2</item>
-        <item name="android:paddingStart">@dimen/gap_grade_5</item>
+
     </style>
 
     <style name="LinearLayout.Main.Item.Vertical">
@@ -43,6 +42,8 @@
     </style>
 
     <style name="LinearLayout.Main.Item.Horizontal">
+        <item name="android:paddingEnd">@dimen/gap_grade_2</item>
+        <item name="android:paddingStart">@dimen/gap_grade_5</item>
         <item name="android:orientation">horizontal</item>
     </style>
 
@@ -78,4 +79,9 @@
         <item name="android:background">@drawable/bottom_line_bg</item>
     </style>
 
+
+    <style name="AppDialogLayout">
+        <item name="dialogMainLayout">@layout/dialog_single_choice</item>
+        <item name="dialogListLayout">@layout/dialog_app_select</item>
+    </style>
 </resources>

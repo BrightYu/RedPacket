@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   Copyright (C) 2015  Haiyang Yu Android Source Project
 
   Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,13 +14,18 @@
   limitations under the License.
   -->
 
-<com.bright.common.widget.dialog.RecycleListView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/select_dialog_listview"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:cacheColorHint="@null"
-    android:divider="?android:attr/listDivider"
-    android:dividerHeight="1px"
-    android:listSelector="@android:color/transparent"
-    android:overScrollMode="ifContentScrolls"
-    android:scrollbars="vertical" />
+<resources>
+
+    <attr name="hasSwitch" format="boolean" />
+    <declare-styleable name="NormalPreference">
+        <attr name="hasSwitch" />
+        <attr name="text" />
+        <attr name="textColor" />
+        <attr name="textSize" />
+
+        <attr name="subText" />
+        <attr name="subTextSize" />
+        <attr name="subTextColor" />
+        <attr name="android:minHeight" />
+    </declare-styleable>
+</resources>

@@ -102,6 +102,9 @@ public class MainActivity extends RedPacketActivity implements View.OnClickListe
     @Override
     protected void onResume() {
         super.onResume();
+
+        updateNotifyControl();
+
         if (QiangHongBaoService.isRunning()) {
             if (mTipsDialog != null) {
                 mTipsDialog.dismiss();

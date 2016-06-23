@@ -13,18 +13,6 @@
     <string name="wechat_settings">微信设置</string>
     <string name="notify_settings">红包提醒设置</string>
 
-    <string name="after_open_hongbao">拆红包</string>
-    <string name="after_open_see">看看大家的手气</string>
-    <string name="after_open_none">静静地看着</string>
-
-    <string name="after_get_back_home">返回桌面</string>
-    <string name="after_get_none">静静地看着</string>
-
-    <string name="wx_mode_0">自动抢</string>
-    <string name="wx_mode_1">抢单聊红包，群聊红包只通知</string>
-    <string name="wx_mode_2">抢群聊红包，单聊红包只通知</string>
-    <string name="wx_mode_3">通知手动抢(防封号)</string>
-
     <string name="agreement_title">免责声明</string>
     <string name="agreement_message">本软件仅供学习使用，完全模拟人工操作，抢红包速度取决于你手机的性能与网络，不涉及任何第三方软件接口，本软件已开放源代码，无病毒、不收集用户隐私信息，禁止使用本软件参与赌博活动。一切因使用“%1$s”造成的任何后果，%1$s概不负责，亦不承担任何法律责任!</string>
     <string name="platform">平台</string>
@@ -39,4 +27,22 @@
     <string name="agree">同意</string>
     <string name="disagree">不同意</string>
     <string name="unsport_notifi">快速监听通知栏功能只支持安卓4.3以上的系统</string>
+
+    <string name="grab_mode">抢红包模式</string>
+    <string name="grap_mode_0">自动抢</string>
+    <string name="grap_mode_1">抢单聊红包，群聊红包只通知</string>
+    <string name="grap_mode_2">抢群聊红包，单聊红包只通知</string>
+    <string name="grap_mode_3">通知手动抢(防封号)</string>
+
+    <string name="set_delay_time_title">延迟时间</string>
+    <string name="set_delay_time_subtitle">设置延迟时间可以预防封号</string>
+
+    <string name="open_after_doing">打开红包后</string>
+    <string name="open_after_mode_1">拆红包</string>
+    <string name="open_after_mode_2">看看大家的手气</string>
+    <string name="open_after_mode_3">静静地看着</string>
+
+    <string name="grab_after_doing">抢到红包后</string>
+    <string name="grab_after_mode_1">返回桌面</string>
+    <string name="grab_after_mode_2">静静地看着</string>
 </resources>

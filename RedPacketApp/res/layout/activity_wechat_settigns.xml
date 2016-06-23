@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <com.bright.common.widget.TopBar
+        android:id="@+id/top_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:text="@string/wechat_settings" />
+
+    <com.yuhaiyang.redpacket.ui.widget.NormalPreference
+        android:id="@+id/grab_mode"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bottom_line_normal_bg"
+        app:subText="@string/grap_mode_0"
+        app:text="@string/grab_mode" />
+
+    <com.yuhaiyang.redpacket.ui.widget.NormalPreference
+        android:id="@+id/grab_delay_time"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bottom_line_normal_bg"
+        app:subText="@string/set_delay_time_title"
+        app:text="@string/set_delay_time_title" />
+
+    <com.yuhaiyang.redpacket.ui.widget.NormalPreference
+        android:id="@+id/open_after_doing"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bottom_line_normal_bg"
+        app:subText="@string/open_after_mode_1"
+        app:text="@string/open_after_doing" />
+
+    <com.yuhaiyang.redpacket.ui.widget.NormalPreference
+        android:id="@+id/grab_after_doing"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bottom_line_normal_bg"
+        app:subText="@string/grab_after_mode_1"
+        app:text="@string/grab_after_doing" />
+
+</LinearLayout>

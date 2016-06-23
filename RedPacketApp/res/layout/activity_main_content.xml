@@ -8,7 +8,7 @@
         style="@style/TextView.Main.Tip"
         android:text="@string/platform" />
 
-    <LinearLayout style="@style/LinearLayout.Main.Item">
+    <LinearLayout style="@style/LinearLayout.Main.Item.Horizontal">
 
         <ImageView
             android:layout_width="@dimen/dp_35"
@@ -40,24 +40,13 @@
         style="@style/TextView.Main.Tip"
         android:text="@string/platform_settings" />
 
-    <LinearLayout
+    <com.yuhaiyang.redpacket.ui.widget.NormalPreference
         android:id="@+id/wechat_setting"
-        style="@style/LinearLayout.Main.Item.Vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:background="@drawable/no_line_bg"
-        android:orientation="vertical">
-
-        <TextView
-            style="@style/TextView.Main.Title"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/wechat_settings" />
-
-        <TextView
-            style="@style/TextView.Main.SubTitle"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/wechat_settings_tip" />
-    </LinearLayout>
+        app:subText="@string/wechat_settings_tip"
+        app:text="@string/wechat_settings" />
 
     <TextView
         style="@style/TextView.Main.Tip"
@@ -65,27 +54,15 @@
 
     <LinearLayout
         android:id="@+id/advanced_settings"
-        style="@style/LinearLayout.Main.Item.Vertical"
+        style="@style/LinearLayout.Main.Item"
         android:orientation="horizontal">
 
-        <LinearLayout
+        <com.yuhaiyang.redpacket.ui.widget.NormalPreference
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:orientation="vertical">
-
-            <TextView
-                style="@style/TextView.Main.Title"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/notify_control_settings" />
-
-            <TextView
-                style="@style/TextView.Main.SubTitle"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/notify_control_settings_tip" />
-        </LinearLayout>
+            app:subText="@string/notify_control_settings_tip"
+            app:text="@string/notify_control_settings" />
 
         <com.bright.common.widget.SwitchButton
             android:id="@+id/notify_server_control"

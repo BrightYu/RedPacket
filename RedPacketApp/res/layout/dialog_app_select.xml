@@ -20,6 +20,7 @@
     android:id="@+id/select_dialog_listview"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="@drawable/top_blue_line_white_normal_bg"
     android:cacheColorHint="@null"
     android:divider="?android:attr/listDivider"
     android:dividerHeight="1px"
