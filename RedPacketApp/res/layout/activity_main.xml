@@ -10,61 +10,19 @@
         android:layout_height="wrap_content"
         app:text="@string/app_name" />
 
-    <TextView
-        style="@style/TextView.Main.Tip"
-        android:text="@string/platform" />
+    <android.support.v4.widget.DrawerLayout
+        android:id="@+id/content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-    <LinearLayout style="@style/LinearLayout.Main.Item">
+        <include layout="@layout/activity_main_content" />
 
-        <ImageView
-            android:layout_width="@dimen/dp_35"
-            android:layout_height="@dimen/dp_35"
-            android:scaleType="centerInside"
-            android:src="@drawable/ic_wechat_friend_normal" />
-
-        <TextView
-            style="@style/TextView.Main.Title"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:padding="@dimen/gap_grade_3"
-            android:text="@string/wechat" />
-
-        <com.bright.common.widget.SwitchButton
-            android:id="@+id/name"
-            style="@style/SwitchButtonStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_margin="@dimen/gap_grade_3"
-            app:backgroundDrawable="@drawable/switch_background"
-            app:backgroundMeasureRatio="2"
-            app:thumbDrawable="@drawable/switch_thumb" />
-    </LinearLayout>
-
-    <TextView
-        style="@style/TextView.Main.Tip"
-        android:text="@string/platform_settings" />
-
-    <LinearLayout
-        android:id="@+id/wechat_setting"
-        style="@style/LinearLayout.Main.Item.Vertical"
-        android:orientation="vertical">
-
-        <TextView
-            style="@style/TextView.Main.Title"
+        <include
+            layout="@layout/activity_main_menu"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/wechat_settings" />
+            android:layout_height="match_parent"
+            android:layout_gravity="start" />
 
-        <TextView
-            style="@style/TextView.Main.SubTitle"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/wechat_settings" />
-    </LinearLayout>
 
-    <TextView
-        style="@style/TextView.Main.Tip"
-        android:text="@string/advanced_settings" />
+    </android.support.v4.widget.DrawerLayout>
 </LinearLayout>

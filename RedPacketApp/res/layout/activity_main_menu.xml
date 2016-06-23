@@ -1,0 +1,22 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/white"
+    android:orientation="vertical">
+
+
+    <TextView
+        android:id="@+id/menu_service"
+        style="@style/TextView.Main.Menu"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/open_service_button" />
+
+    <TextView
+        android:id="@+id/menu_notify"
+        style="@style/TextView.Main.Menu"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/open_notify_service" />
+
+</LinearLayout>

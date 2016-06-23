@@ -27,26 +27,33 @@ import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
-import android.support.v7.app.AlertDialog;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.graphics.drawable.DrawerArrowDrawable;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
+import android.widget.CompoundButton;
 import android.widget.Toast;
 
+import com.bright.common.widget.SwitchButton;
 import com.bright.common.widget.TopBar;
+import com.bright.common.widget.dialog.BaseDialog;
 import com.yuhaiyang.redpacket.Config;
 import com.yuhaiyang.redpacket.R;
 import com.yuhaiyang.redpacket.ui.activity.base.RedPacketActivity;
-import com.yuhaiyang.redpacket.ui.fragment.MainFragment;
 import com.yuhaiyang.redpacket.ui.service.QiangHongBaoService;
 
-public class MainActivity extends RedPacketActivity {
+public class MainActivity extends RedPacketActivity implements View.OnClickListener, CompoundButton.OnCheckedChangeListener {
     private static final String TAG = "MainActivity";
     private Dialog mTipsDialog;
-    private MainFragment mMainFragment;
     private TopBar mTopBar;
+    private DrawerLayout mContent;
+    private DrawerArrowDrawable mArrowDrawable;
+    private long mLastTime;
+    private boolean mNotificationChangeByUser;
+
+    private SwitchButton mMainServerControl;
+    private SwitchButton mNotifyServerControl;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,39 +72,32 @@ public class MainActivity extends RedPacketActivity {
     @Override
     protected void initViews() {
         super.initViews();
-        DrawerArrowDrawable arrow = new DrawerArrowDrawable(this);
-        arrow.setColor(Color.WHITE);
+        mArrowDrawable = new DrawerArrowDrawable(this);
+        mArrowDrawable.setColor(Color.WHITE);
         mTopBar = (TopBar) findViewById(R.id.top_bar);
-        mTopBar.setLeftImageDrawable(arrow);
+        mTopBar.setOnTopBarListener(this);
+        mTopBar.setLeftImageDrawable(mArrowDrawable);
+
+        mContent = (DrawerLayout) findViewById(R.id.content);
+        mContent.addDrawerListener(mDrawerListener);
+
+
+        mMainServerControl = (SwitchButton) findViewById(R.id.main_server_control);
+        mMainServerControl.setOnCheckedChangeListener(this);
+
+        mNotifyServerControl = (SwitchButton) findViewById(R.id.notify_server_control);
+        mNotifyServerControl.setOnCheckedChangeListener(this);
+
+        View wechatSettings = findViewById(R.id.wechat_setting);
+        wechatSettings.setOnClickListener(this);
+
+        View mentService = findViewById(R.id.menu_service);
+        mentService.setOnClickListener(this);
+
+        View mentNotify = findViewById(R.id.menu_notify);
+        mentNotify.setOnClickListener(this);
     }
 
-    private BroadcastReceiver mConnectReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            if (isFinishing()) {
-                Log.i(TAG, "onReceive: finishing just return");
-                return;
-            }
-            String action = intent.getAction();
-            Log.d(TAG, "onReceive: action = " + action);
-
-            if (Config.ACTION_QIANGHONGBAO_SERVICE_CONNECT.equals(action)) {
-                if (mTipsDialog != null) {
-                    mTipsDialog.dismiss();
-                }
-            } else if (Config.ACTION_QIANGHONGBAO_SERVICE_DISCONNECT.equals(action)) {
-                showOpenAccessibilityServiceDialog();
-            } else if (Config.ACTION_NOTIFY_LISTENER_SERVICE_CONNECT.equals(action)) {
-                if (mMainFragment != null) {
-                    mMainFragment.updateNotifyPreference();
-                }
-            } else if (Config.ACTION_NOTIFY_LISTENER_SERVICE_DISCONNECT.equals(action)) {
-                if (mMainFragment != null) {
-                    mMainFragment.updateNotifyPreference();
-                }
-            }
-        }
-    };
 
     @Override
     protected void onResume() {
@@ -110,6 +110,7 @@ public class MainActivity extends RedPacketActivity {
             showOpenAccessibilityServiceDialog();
         }
 
+        // 是否同意免责
         boolean isAgreement = Config.getConfig(this).isAgreement();
         if (!isAgreement) {
             showAgreementDialog();
@@ -128,52 +129,40 @@ public class MainActivity extends RedPacketActivity {
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-
-        MenuItem item = menu.add(0, 0, 1, R.string.open_service_button);
-        item.setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_NEVER);
-
-        MenuItem notifyitem = menu.add(0, 3, 2, R.string.open_notify_service);
-        notifyitem.setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_NEVER);
-        return super.onCreateOptionsMenu(menu);
+    public void onBackPressed() {
+        long nowtime = System.currentTimeMillis();
+        if (nowtime - mLastTime < 2000) {
+            super.onBackPressed();
+        } else {
+            toast(R.string.click_again_exit);
+            mLastTime = nowtime;
+        }
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case 0:
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.menu_service:
                 openAccessibilityServiceSettings();
-                return true;
-            case 3:
+                break;
+            case R.id.menu_notify:
                 openNotificationServiceSettings();
                 break;
-
+            case R.id.wechat_setting:
+                Intent intent = new Intent(this, WechatSettingsActivity.class);
+                startActivity(intent);
+                break;
         }
-        return super.onOptionsItemSelected(item);
     }
 
-    /**
-     * 显示免责声明的对话框
-     */
-    private void showAgreementDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setCancelable(false);
-        builder.setTitle(R.string.agreement_title);
-        builder.setMessage(getString(R.string.agreement_message, getString(R.string.app_name)));
-        builder.setPositiveButton("同意", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                Config.getConfig(getApplicationContext()).setAgreement(true);
-            }
-        });
-        builder.setNegativeButton("不同意", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                Config.getConfig(getApplicationContext()).setAgreement(false);
-                finish();
-            }
-        });
-        builder.show();
+
+    @Override
+    public void onLeftClick(View v) {
+        if (mContent.isDrawerOpen(GravityCompat.START)) {
+            mContent.closeDrawer(GravityCompat.START);
+        } else {
+            mContent.openDrawer(GravityCompat.START);
+        }
     }
 
 
@@ -184,15 +173,14 @@ public class MainActivity extends RedPacketActivity {
         if (mTipsDialog != null && mTipsDialog.isShowing()) {
             return;
         }
-        View view = getLayoutInflater().inflate(R.layout.dialog_tips_layout, null);
+        View view = getLayoutInflater().inflate(R.layout.dialog_open_server, null);
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 openAccessibilityServiceSettings();
             }
         });
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle(R.string.open_service_title);
+        BaseDialog.Builder builder = new BaseDialog.Builder(this);
         builder.setView(view);
         builder.setPositiveButton(R.string.open_service_button, new DialogInterface.OnClickListener() {
             @Override
@@ -230,4 +218,95 @@ public class MainActivity extends RedPacketActivity {
         }
     }
 
+    private void updateNotifyControl() {
+        boolean running = QiangHongBaoService.isNotificationServiceRunning();
+        boolean enable = Config.getConfig(this).isEnableNotificationService();
+        if (enable && running && !mNotifyServerControl.isChecked()) {
+            mNotifyServerControl.setChecked(true);
+        } else if ((!enable || !running) && mNotifyServerControl.isChecked()) {
+            mNotifyServerControl.setChecked(false);
+        }
+    }
+
+    private void updateNotifiyContrlSettings(boolean isChecked) {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR2) {
+            Toast.makeText(this, R.string.unsport_notifi, Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        if (!mNotificationChangeByUser) {
+            mNotificationChangeByUser = true;
+            return;
+        }
+
+        Config.getConfig(this).setNotificationServiceEnable(isChecked);
+
+        if (isChecked && !QiangHongBaoService.isNotificationServiceRunning()) {
+            openNotificationServiceSettings();
+        }
+    }
+
+    private DrawerLayout.DrawerListener mDrawerListener = new DrawerLayout.DrawerListener() {
+        @Override
+        public void onDrawerSlide(View drawerView, float slideOffset) {
+            mArrowDrawable.setProgress(slideOffset);
+        }
+
+        @Override
+        public void onDrawerOpened(View drawerView) {
+
+        }
+
+        @Override
+        public void onDrawerClosed(View drawerView) {
+
+        }
+
+        @Override
+        public void onDrawerStateChanged(int newState) {
+
+        }
+    };
+
+
+    private BroadcastReceiver mConnectReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (isFinishing()) {
+                Log.i(TAG, "onReceive: finishing just return");
+                return;
+            }
+            String action = intent.getAction();
+            Log.d(TAG, "onReceive: action = " + action);
+
+            if (Config.ACTION_QIANGHONGBAO_SERVICE_CONNECT.equals(action)) {
+                if (mTipsDialog != null) {
+                    mTipsDialog.dismiss();
+                }
+            } else if (Config.ACTION_QIANGHONGBAO_SERVICE_DISCONNECT.equals(action)) {
+                showOpenAccessibilityServiceDialog();
+            } else if (Config.ACTION_NOTIFY_LISTENER_SERVICE_CONNECT.equals(action)) {
+                mNotificationChangeByUser = false;
+                updateNotifyControl();
+            } else if (Config.ACTION_NOTIFY_LISTENER_SERVICE_DISCONNECT.equals(action)) {
+                mNotificationChangeByUser = false;
+                updateNotifyControl();
+            }
+        }
+    };
+
+
+    @Override
+    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+        switch (buttonView.getId()) {
+            case R.id.main_server_control:
+                if (isChecked && !QiangHongBaoService.isRunning()) {
+                    showOpenAccessibilityServiceDialog();
+                }
+                break;
+            case R.id.notify_server_control:
+                updateNotifiyContrlSettings(isChecked);
+                break;
+        }
+    }
 }

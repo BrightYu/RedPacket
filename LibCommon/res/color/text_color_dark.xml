@@ -14,19 +14,10 @@
   limitations under the License.
   -->
 
-<resources>
-    <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.NoActionBar">
-        <!--背景颜色-->
-        <item name="android:windowBackground">@drawable/window_background</item>
-        <item name="android:overScrollMode">never</item>
-        <item name="android:divider">@color/line</item>
-        <item name="android:dividerHeight">1px</item>
-    </style>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:color="@color/text_color_dark_pressed" android:state_pressed="true" />
+    <item android:color="@color/text_color_dark_pressed" android:state_selected="true" />
+    <item android:color="@color/text_color_dark_normal" />
+    <!-- not selected -->
+</selector>
 
-
-    <style name="AppTheme.Splash" parent="Theme.NoActionBar.Fullscreen">
-        <!--背景颜色-->
-        <item name="android:windowBackground">@drawable/splash</item>
-    </style>
-</resources>

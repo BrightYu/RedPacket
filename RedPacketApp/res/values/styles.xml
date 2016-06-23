@@ -58,15 +58,24 @@
     </style>
 
     <style name="TextView.Main.Title">
-        <item name="android:textSize">@dimen/H_title</item>
-        <item name="android:textColor">@color/text_color_normal</item>
+        <item name="android:textSize">@dimen/G_title</item>
+        <item name="android:textColor">@color/text_color_dark_normal</item>
     </style>
 
     <style name="TextView.Main.SubTitle">
         <item name="android:textSize">@dimen/I_title</item>
-        <item name="android:paddingTop">@dimen/dp_2</item>
-        <item name="android:paddingStart">@dimen/dp_1</item>
+        <item name="android:paddingTop">@dimen/dp_1</item>
         <item name="android:textColor">@color/text_color_light_normal</item>
+    </style>
+
+    <style name="TextView.Main.Menu">
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:minHeight">@dimen/dp_60</item>
+        <item name="android:paddingStart">@dimen/gap_grade_5</item>
+        <item name="android:textSize">@dimen/H_title</item>
+        <item name="android:clickable">true</item>
+        <item name="android:textColor">@color/text_color_normal</item>
+        <item name="android:background">@drawable/bottom_line_bg</item>
     </style>
 
 </resources>

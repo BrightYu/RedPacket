@@ -1,0 +1,101 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <TextView
+        style="@style/TextView.Main.Tip"
+        android:text="@string/platform" />
+
+    <LinearLayout style="@style/LinearLayout.Main.Item">
+
+        <ImageView
+            android:layout_width="@dimen/dp_35"
+            android:layout_height="@dimen/dp_35"
+            android:scaleType="centerInside"
+            android:src="@drawable/ic_wechat_friend_normal" />
+
+        <TextView
+            style="@style/TextView.Main.Title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:padding="@dimen/gap_grade_3"
+            android:text="@string/wechat" />
+
+        <com.bright.common.widget.SwitchButton
+            android:id="@+id/main_server_control"
+            style="@style/SwitchButtonStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="@dimen/gap_grade_3"
+            app:backgroundDrawable="@drawable/switch_background"
+            app:backgroundMeasureRatio="2"
+            app:thumbDrawable="@drawable/switch_thumb" />
+    </LinearLayout>
+
+    <TextView
+        style="@style/TextView.Main.Tip"
+        android:text="@string/platform_settings" />
+
+    <LinearLayout
+        android:id="@+id/wechat_setting"
+        style="@style/LinearLayout.Main.Item.Vertical"
+        android:background="@drawable/no_line_bg"
+        android:orientation="vertical">
+
+        <TextView
+            style="@style/TextView.Main.Title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/wechat_settings" />
+
+        <TextView
+            style="@style/TextView.Main.SubTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/wechat_settings_tip" />
+    </LinearLayout>
+
+    <TextView
+        style="@style/TextView.Main.Tip"
+        android:text="@string/advanced_settings" />
+
+    <LinearLayout
+        android:id="@+id/advanced_settings"
+        style="@style/LinearLayout.Main.Item.Vertical"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                style="@style/TextView.Main.Title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/notify_control_settings" />
+
+            <TextView
+                style="@style/TextView.Main.SubTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/notify_control_settings_tip" />
+        </LinearLayout>
+
+        <com.bright.common.widget.SwitchButton
+            android:id="@+id/notify_server_control"
+            style="@style/SwitchButtonStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="@dimen/gap_grade_3"
+            app:backgroundDrawable="@drawable/switch_background"
+            app:backgroundMeasureRatio="2"
+            app:thumbDrawable="@drawable/switch_thumb" />
+    </LinearLayout>
+</LinearLayout>
