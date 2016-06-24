@@ -3,14 +3,14 @@ package com.yuhaiyang.redpacket.job;
 import android.content.Context;
 
 import com.yuhaiyang.redpacket.Config;
-import com.yuhaiyang.redpacket.ui.service.QiangHongBaoService;
+import com.yuhaiyang.redpacket.ui.service.RedPacketService;
 
-public abstract class BaseIAccessbilityJob implements IAccessbilityJob {
+public abstract class BaseAccessbilityJob implements IAccessbilityJob {
 
-    private QiangHongBaoService service;
+    private RedPacketService service;
 
     @Override
-    public void onCreateJob(QiangHongBaoService service) {
+    public void onCreateJob(RedPacketService service) {
         this.service = service;
     }
 
@@ -22,7 +22,7 @@ public abstract class BaseIAccessbilityJob implements IAccessbilityJob {
         return service.getConfig();
     }
 
-    public QiangHongBaoService getService() {
+    public RedPacketService getService() {
         return service;
     }
 }

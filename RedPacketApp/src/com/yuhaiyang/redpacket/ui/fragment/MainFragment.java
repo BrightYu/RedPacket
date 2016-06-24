@@ -33,7 +33,7 @@ import com.yuhaiyang.redpacket.R;
 import com.yuhaiyang.redpacket.ui.activity.NotifySettingsActivity;
 import com.yuhaiyang.redpacket.ui.activity.WechatSettingsActivity;
 import com.yuhaiyang.redpacket.ui.fragment.base.RedPacketPreferenceFragment;
-import com.yuhaiyang.redpacket.ui.service.QiangHongBaoService;
+import com.yuhaiyang.redpacket.ui.service.RedPacketService;
 
 public class MainFragment extends RedPacketPreferenceFragment {
 
@@ -51,7 +51,7 @@ public class MainFragment extends RedPacketPreferenceFragment {
         wechatPref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override
             public boolean onPreferenceChange(Preference preference, Object newValue) {
-                if ((Boolean) newValue && !QiangHongBaoService.isRunning()) {
+                if ((Boolean) newValue && !RedPacketService.isRunning()) {
                     showOpenAccessibilityServiceDialog();
                 }
                 return true;
@@ -76,7 +76,7 @@ public class MainFragment extends RedPacketPreferenceFragment {
 
                 Config.getConfig(getActivity()).setNotificationServiceEnable(enalbe);
 
-                if (enalbe && !QiangHongBaoService.isNotificationServiceRunning()) {
+                if (enalbe && !RedPacketService.isNotificationServiceRunning()) {
                     openNotificationServiceSettings();
                     return false;
                 }
@@ -109,7 +109,7 @@ public class MainFragment extends RedPacketPreferenceFragment {
         if (mNotificationPreference == null) {
             return;
         }
-        boolean running = QiangHongBaoService.isNotificationServiceRunning();
+        boolean running = RedPacketService.isNotificationServiceRunning();
         boolean enable = Config.getConfig(getActivity()).isEnableNotificationService();
         if (enable && running && !mNotificationPreference.isChecked()) {
             mNotificationChangeByUser = false;

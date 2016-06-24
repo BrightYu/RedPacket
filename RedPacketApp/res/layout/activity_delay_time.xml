@@ -20,11 +20,18 @@
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
+    <com.bright.common.widget.TopBar
+        android:id="@+id/top_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:text="@string/set_delay_time_title" />
+
     <com.yuhaiyang.redpacket.ui.widget.InputEdit
-        android:id="@+id/name"
+        android:id="@+id/time"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/gap_grade_2"
+        android:inputType="number"
         app:focusColor="@color/blue_400"
         app:hint="@string/set_delay_time_subtitle" />
 </LinearLayout>

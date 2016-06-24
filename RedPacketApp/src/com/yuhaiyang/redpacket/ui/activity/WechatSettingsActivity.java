@@ -16,14 +16,15 @@
 
 package com.yuhaiyang.redpacket.ui.activity;
 
-import android.app.Fragment;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.preference.EditTextPreference;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.support.v7.graphics.drawable.DrawerArrowDrawable;
+import android.util.Log;
 import android.view.View;
 
 import com.bright.common.widget.TopBar;
@@ -35,10 +36,13 @@ import com.yuhaiyang.redpacket.ui.fragment.base.RedPacketPreferenceFragment;
 import com.yuhaiyang.redpacket.ui.widget.NormalPreference;
 
 public class WechatSettingsActivity extends RedPacketActivity implements View.OnClickListener {
+    private static final String TAG = "WechatSettingsActivity";
     private NormalPreference mGrapMode;
     private NormalPreference mDelayTime;
     private NormalPreference mOpenAfterAtion;
     private NormalPreference mGrapAfterAtion;
+
+    private final static int REQUEST_DELAY_TIME = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,7 +81,8 @@ public class WechatSettingsActivity extends RedPacketActivity implements View.On
                 showGrapModeDialog();
                 break;
             case R.id.grab_delay_time:
-                showDelayTimeDialog();
+                Intent intent = new Intent(this, DelayTimeActivity.class);
+                startActivityForResult(intent, REQUEST_DELAY_TIME);
                 break;
             case R.id.open_after_doing:
                 showOpenAfterActionDialog();
@@ -103,14 +108,6 @@ public class WechatSettingsActivity extends RedPacketActivity implements View.On
         builder.create().show();
     }
 
-    private void showDelayTimeDialog() {
-        BaseDialog.Builder builder = new BaseDialog.Builder(this, R.style.Dialog_SingleChoice);
-        builder.setTitle(R.string.set_delay_time_title);
-        View view = getLayoutInflater().inflate(R.layout.dialog_delay_time, null);
-        builder.setView(view);
-        builder.setNegativeButton(R.string.cancel, null);
-        builder.create().show();
-    }
 
     private void showOpenAfterActionDialog() {
         BaseDialog.Builder builder = new BaseDialog.Builder(this, R.style.Dialog_SingleChoice);
@@ -138,6 +135,27 @@ public class WechatSettingsActivity extends RedPacketActivity implements View.On
         });
         builder.setNegativeButton(R.string.cancel, null);
         builder.create().show();
+    }
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode != RESULT_OK) {
+            Log.i(TAG, "onActivityResult: reuslt not ok");
+            return;
+        }
+
+        switch (requestCode) {
+            case REQUEST_DELAY_TIME:
+                if (data == null) {
+                    Log.i(TAG, "onActivityResult:  data is null");
+                    return;
+                }
+                String time = data.getStringExtra(DelayTimeActivity.DELAY_TIME);
+                mDelayTime.setSubTitle(time);
+                break;
+        }
+
     }
 
     public static class WechatSettingsFragment extends RedPacketPreferenceFragment {

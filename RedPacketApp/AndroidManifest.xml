@@ -55,19 +55,17 @@
             </intent-filter>
         </activity>
 
+        <!--MainActivity-->
         <activity android:name=".ui.activity.MainActivity" />
-
-
-        <activity
-            android:name=".ui.activity.WechatSettingsActivity"
-            android:label="@string/wechat_settings" />
-
-        <activity
-            android:name=".ui.activity.NotifySettingsActivity"
-            android:label="@string/notify_settings" />
+        <!--WechatSettings-->
+        <activity android:name=".ui.activity.WechatSettingsActivity" />
+        <!--延迟-->
+        <activity android:name=".ui.activity.DelayTimeActivity" />
+        <!--红包提醒-->
+        <activity android:name=".ui.activity.NotifySettingsActivity" />
 
         <service
-            android:name=".ui.service.QiangHongBaoService"
+            android:name=".ui.service.RedPacketService"
             android:enabled="true"
             android:exported="true"
             android:label="@string/service_name"
@@ -82,7 +80,7 @@
         </service>
 
         <service
-            android:name=".ui.service.QHBNotificationService"
+            android:name=".ui.service.RedPacketNotificationService"
             android:label="@string/app_name"
             android:permission="android.permission.BIND_NOTIFICATION_LISTENER_SERVICE">
 

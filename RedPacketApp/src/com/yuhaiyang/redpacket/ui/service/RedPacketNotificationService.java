@@ -1,12 +1,12 @@
 /**
  * Copyright (C) 2016 The yuhaiyang Android Source Project
- *
+ * <p/>
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
+ * <p/>
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * <p/>
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -28,24 +28,17 @@ import com.yuhaiyang.redpacket.BuildConfig;
 import com.yuhaiyang.redpacket.Config;
 import com.yuhaiyang.redpacket.IStatusBarNotification;
 
-/**
- * <p>Created 16/2/4 下午11:16.</p>
- * <p><a href="mailto:codeboy2013@gmail.com">Email:codeboy2013@gmail.com</a></p>
- * <p><a href="http://www.happycodeboy.com">LeonLee Blog</a></p>
- *
- * @author LeonLee
- */
+
 @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR2)
-public class QHBNotificationService extends NotificationListenerService {
+public class RedPacketNotificationService extends NotificationListenerService {
+    private static final String TAG = "NotificationService";
 
-    private static final String TAG = "QHBNotificationService";
-
-    private static QHBNotificationService service;
+    private static RedPacketNotificationService service;
 
     @Override
     public void onCreate() {
         super.onCreate();
-        if(Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
             onListenerConnected();
         }
     }
@@ -56,16 +49,16 @@ public class QHBNotificationService extends NotificationListenerService {
 
     @Override
     public void onNotificationPosted(final StatusBarNotification sbn) {
-        if(BuildConfig.DEBUG) {
+        if (BuildConfig.DEBUG) {
             Log.i(TAG, "onNotificationRemoved");
         }
-        if(!getConfig().isAgreement()) {
+        if (!getConfig().isAgreement()) {
             return;
         }
-        if(!getConfig().isEnableNotificationService()) {
+        if (!getConfig().isEnableNotificationService()) {
             return;
         }
-        QiangHongBaoService.handeNotificationPosted(new IStatusBarNotification() {
+        RedPacketService.handeNotificationPosted(new IStatusBarNotification() {
             @Override
             public String getPackageName() {
                 return sbn.getPackageName();
@@ -80,17 +73,17 @@ public class QHBNotificationService extends NotificationListenerService {
 
     @Override
     public void onNotificationRemoved(StatusBarNotification sbn) {
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             super.onNotificationRemoved(sbn);
         }
-        if(BuildConfig.DEBUG) {
+        if (BuildConfig.DEBUG) {
             Log.i(TAG, "onNotificationRemoved");
         }
     }
 
     @Override
     public void onListenerConnected() {
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             super.onListenerConnected();
         }
 
@@ -111,9 +104,11 @@ public class QHBNotificationService extends NotificationListenerService {
         sendBroadcast(intent);
     }
 
-    /** 是否启动通知栏监听*/
+    /**
+     * 是否启动通知栏监听
+     */
     public static boolean isRunning() {
-        if(service == null) {
+        if (service == null) {
             return false;
         }
         return true;

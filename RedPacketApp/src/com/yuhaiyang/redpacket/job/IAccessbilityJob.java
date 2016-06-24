@@ -3,12 +3,12 @@ package com.yuhaiyang.redpacket.job;
 import android.view.accessibility.AccessibilityEvent;
 
 import com.yuhaiyang.redpacket.IStatusBarNotification;
-import com.yuhaiyang.redpacket.ui.service.QiangHongBaoService;
+import com.yuhaiyang.redpacket.ui.service.RedPacketService;
 
 public interface IAccessbilityJob {
     String getTargetPackageName();
 
-    void onCreateJob(QiangHongBaoService service);
+    void onCreateJob(RedPacketService service);
 
     void onReceiveJob(AccessibilityEvent event);
 

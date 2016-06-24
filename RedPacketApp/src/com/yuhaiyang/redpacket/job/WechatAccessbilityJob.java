@@ -20,16 +20,16 @@ import android.view.accessibility.AccessibilityNodeInfo;
 import com.yuhaiyang.redpacket.BuildConfig;
 import com.yuhaiyang.redpacket.Config;
 import com.yuhaiyang.redpacket.IStatusBarNotification;
-import com.yuhaiyang.redpacket.ui.service.QiangHongBaoService;
+import com.yuhaiyang.redpacket.ui.service.RedPacketService;
 import com.yuhaiyang.redpacket.util.AccessibilityHelper;
 import com.yuhaiyang.redpacket.util.NotifyHelper;
 
 import java.util.List;
 
 
-public class WechatIAccessbilityJob extends BaseIAccessbilityJob {
+public class WechatAccessbilityJob extends BaseAccessbilityJob {
 
-    private static final String TAG = "WechatIAccessbilityJob";
+    private static final String TAG = "WechatAccessbilityJob";
 
     /**
      * 微信的包名
@@ -70,7 +70,7 @@ public class WechatIAccessbilityJob extends BaseIAccessbilityJob {
     };
 
     @Override
-    public void onCreateJob(QiangHongBaoService service) {
+    public void onCreateJob(RedPacketService service) {
         super.onCreateJob(service);
 
         updatePackageInfo();
@@ -119,7 +119,7 @@ public class WechatIAccessbilityJob extends BaseIAccessbilityJob {
             if (data == null || !(data instanceof Notification)) {
                 return;
             }
-            if (QiangHongBaoService.isNotificationServiceRunning() && getConfig().isEnableNotificationService()) { //开启快速模式，不处理
+            if (RedPacketService.isNotificationServiceRunning() && getConfig().isEnableNotificationService()) { //开启快速模式，不处理
                 return;
             }
             List<CharSequence> texts = event.getText();

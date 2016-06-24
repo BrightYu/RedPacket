@@ -41,7 +41,7 @@ import com.bright.common.widget.dialog.BaseDialog;
 import com.yuhaiyang.redpacket.Config;
 import com.yuhaiyang.redpacket.R;
 import com.yuhaiyang.redpacket.ui.activity.base.RedPacketActivity;
-import com.yuhaiyang.redpacket.ui.service.QiangHongBaoService;
+import com.yuhaiyang.redpacket.ui.service.RedPacketService;
 
 public class MainActivity extends RedPacketActivity implements View.OnClickListener, CompoundButton.OnCheckedChangeListener {
     private static final String TAG = "MainActivity";
@@ -105,7 +105,7 @@ public class MainActivity extends RedPacketActivity implements View.OnClickListe
 
         updateNotifyControl();
 
-        if (QiangHongBaoService.isRunning()) {
+        if (RedPacketService.isRunning()) {
             if (mTipsDialog != null) {
                 mTipsDialog.dismiss();
             }
@@ -222,7 +222,7 @@ public class MainActivity extends RedPacketActivity implements View.OnClickListe
     }
 
     private void updateNotifyControl() {
-        boolean running = QiangHongBaoService.isNotificationServiceRunning();
+        boolean running = RedPacketService.isNotificationServiceRunning();
         boolean enable = Config.getConfig(this).isEnableNotificationService();
         if (enable && running && !mNotifyServerControl.isChecked()) {
             mNotifyServerControl.setChecked(true);
@@ -244,7 +244,7 @@ public class MainActivity extends RedPacketActivity implements View.OnClickListe
 
         Config.getConfig(this).setNotificationServiceEnable(isChecked);
 
-        if (isChecked && !QiangHongBaoService.isNotificationServiceRunning()) {
+        if (isChecked && !RedPacketService.isNotificationServiceRunning()) {
             openNotificationServiceSettings();
         }
     }
@@ -303,7 +303,7 @@ public class MainActivity extends RedPacketActivity implements View.OnClickListe
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
         switch (buttonView.getId()) {
             case R.id.main_server_control:
-                if (isChecked && !QiangHongBaoService.isRunning()) {
+                if (isChecked && !RedPacketService.isRunning()) {
                     showOpenAccessibilityServiceDialog();
                 }
                 break;
