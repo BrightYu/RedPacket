@@ -62,6 +62,11 @@ public class Config {
         preferences = context.getSharedPreferences(PREFERENCE_NAME, Context.MODE_PRIVATE);
     }
 
+
+    public void setWechatEnalbe(boolean enable) {
+        preferences.edit().putBoolean(KEY_ENABLE_WECHAT, enable).apply();
+    }
+
     /**
      * 是否启动微信抢红包
      */
