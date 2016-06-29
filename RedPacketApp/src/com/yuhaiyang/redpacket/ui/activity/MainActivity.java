@@ -55,6 +55,8 @@ public class MainActivity extends RedPacketActivity implements View.OnClickListe
     private SwitchButton mMainServerControl;
     private SwitchButton mNotifyServerControl;
 
+    private Config mConfig;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -66,6 +68,8 @@ public class MainActivity extends RedPacketActivity implements View.OnClickListe
         filter.addAction(Config.ACTION_NOTIFY_LISTENER_SERVICE_DISCONNECT);
         filter.addAction(Config.ACTION_NOTIFY_LISTENER_SERVICE_CONNECT);
         registerReceiver(mConnectReceiver, filter);
+
+        mConfig = Config.getConfig(this);
     }
 
 
@@ -118,6 +122,9 @@ public class MainActivity extends RedPacketActivity implements View.OnClickListe
         if (!isAgreement) {
             showAgreementDialog();
         }
+
+        mMainServerControl.setChecked(mConfig.isEnableWechat());
+        mNotifyServerControl.setChecked(mConfig.isEnableNotificationService());
     }
 
     @Override
@@ -306,9 +313,12 @@ public class MainActivity extends RedPacketActivity implements View.OnClickListe
                 if (isChecked && !RedPacketService.isRunning()) {
                     showOpenAccessibilityServiceDialog();
                 }
+
+                mConfig.setWechatEnalbe(isChecked);
                 break;
             case R.id.notify_server_control:
                 updateNotifiyContrlSettings(isChecked);
+                mConfig.setNotificationServiceEnable(isChecked);
                 break;
         }
     }
