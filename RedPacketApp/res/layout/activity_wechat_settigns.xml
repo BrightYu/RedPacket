@@ -43,4 +43,8 @@
         app:subText="@string/grab_after_mode_1"
         app:text="@string/grab_after_doing" />
 
+    <FrameLayout
+        android:id="@+id/test"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 </LinearLayout>

@@ -24,6 +24,7 @@
         android:id="@+id/top_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        app:rightText="@string/save"
         app:text="@string/set_delay_time_title" />
 
     <com.yuhaiyang.redpacket.ui.widget.InputEdit

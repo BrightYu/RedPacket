@@ -123,6 +123,10 @@ public class NormalPreference extends LinearLayout {
         return mSubTitleView;
     }
 
+    public String getSubText(){
+        return mSubTitleView.getText().toString();
+    }
+
     public void setSubTitle(@StringRes int subTitle) {
         setSubTitle(getContext().getString(subTitle));
     }

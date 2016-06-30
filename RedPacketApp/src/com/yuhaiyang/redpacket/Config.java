@@ -3,13 +3,7 @@ package com.yuhaiyang.redpacket;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-/**
- * <p>Created 16/1/15 下午10:59.</p>
- * <p><a href="mailto:codeboy2013@gmail.com">Email:codeboy2013@gmail.com</a></p>
- * <p><a href="http://www.happycodeboy.com">LeonLee Blog</a></p>
- *
- * @author LeonLee
- */
+
 public class Config {
 
     public static final String ACTION_QIANGHONGBAO_SERVICE_DISCONNECT = "com.codeboy.qianghongbao.ACCESSBILITY_DISCONNECT";
@@ -75,6 +69,13 @@ public class Config {
     }
 
     /**
+     * 设置微信抢到红包后的事件
+     */
+    public void setWechatAfterOpenHongBaoEvent(int mode) {
+        preferences.edit().putString(KEY_WECHAT_AFTER_OPEN_HONGBAO, String.valueOf(mode)).apply();
+    }
+
+    /**
      * 微信打开红包后的事件
      */
     public int getWechatAfterOpenHongBaoEvent() {
@@ -86,6 +87,15 @@ public class Config {
         }
         return defaultValue;
     }
+
+
+    /**
+     * 设置微信抢到红包后的事件
+     */
+    public void setWechatAfterGetHongBaoEvent(int mode) {
+        preferences.edit().putString(KEY_WECHAT_AFTER_GET_HONGBAO, String.valueOf(mode)).apply();
+    }
+
 
     /**
      * 微信抢到红包后的事件
@@ -103,6 +113,14 @@ public class Config {
     /**
      * 微信打开红包后延时时间
      */
+    public void setWechatOpenDelayTime(String time) {
+        preferences.edit().putString(KEY_WECHAT_DELAY_TIME, time).apply();
+    }
+
+
+    /**
+     * 微信打开红包后延时时间
+     */
     public int getWechatOpenDelayTime() {
         int defaultValue = 0;
         String result = preferences.getString(KEY_WECHAT_DELAY_TIME, String.valueOf(defaultValue));
@@ -111,6 +129,14 @@ public class Config {
         } catch (Exception e) {
         }
         return defaultValue;
+    }
+
+
+    /**
+     * 设置微信红包的模式
+     */
+    public void setWechatMode(int mode) {
+        preferences.edit().putString(KEY_WECHAT_MODE, String.valueOf(mode)).apply();
     }
 
     /**

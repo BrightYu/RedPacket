@@ -45,4 +45,5 @@
     <string name="grab_after_doing">抢到红包后</string>
     <string name="grab_after_mode_1">返回桌面</string>
     <string name="grab_after_mode_2">静静地看着</string>
+    <string name="save">保存</string>
 </resources>

@@ -1,12 +1,12 @@
 /**
  * Copyright (C) 2016 The yuhaiyang Android Source Project
- * <p/>
+ * <p>
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * <p/>
+ * <p>
  * http://www.apache.org/licenses/LICENSE-2.0
- * <p/>
+ * <p>
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -20,9 +20,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.preference.EditTextPreference;
-import android.preference.ListPreference;
-import android.preference.Preference;
 import android.support.v7.graphics.drawable.DrawerArrowDrawable;
 import android.util.Log;
 import android.view.View;
@@ -32,7 +29,6 @@ import com.bright.common.widget.dialog.BaseDialog;
 import com.yuhaiyang.redpacket.Config;
 import com.yuhaiyang.redpacket.R;
 import com.yuhaiyang.redpacket.ui.activity.base.RedPacketActivity;
-import com.yuhaiyang.redpacket.ui.fragment.base.RedPacketPreferenceFragment;
 import com.yuhaiyang.redpacket.ui.widget.NormalPreference;
 
 public class WechatSettingsActivity extends RedPacketActivity implements View.OnClickListener {
@@ -43,11 +39,13 @@ public class WechatSettingsActivity extends RedPacketActivity implements View.On
     private NormalPreference mGrapAfterAtion;
 
     private final static int REQUEST_DELAY_TIME = 1;
+    private Config mConfig;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_wechat_settigns);
+        mConfig = Config.getConfig(this);
     }
 
     @Override
@@ -75,6 +73,21 @@ public class WechatSettingsActivity extends RedPacketActivity implements View.On
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        String[] list = getResources().getStringArray(R.array.wechat_grap_mode_list);
+        mGrapMode.setSubTitle(list[mConfig.getWechatMode()]);
+
+        mDelayTime.setSubTitle(String.valueOf(mConfig.getWechatOpenDelayTime()));
+
+        list = getResources().getStringArray(R.array.wechat_open_after_mode_list);
+        mOpenAfterAtion.setSubTitle(list[mConfig.getWechatAfterGetHongBaoEvent()]);
+
+        list = getResources().getStringArray(R.array.wechat_grab_after_mode_list);
+        mGrapAfterAtion.setSubTitle(list[mConfig.getWechatAfterOpenHongBaoEvent()]);
+    }
+
+    @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.grab_mode:
@@ -82,6 +95,7 @@ public class WechatSettingsActivity extends RedPacketActivity implements View.On
                 break;
             case R.id.grab_delay_time:
                 Intent intent = new Intent(this, DelayTimeActivity.class);
+                intent.putExtra(DelayTimeActivity.DELAY_TIME, mDelayTime.getSubText());
                 startActivityForResult(intent, REQUEST_DELAY_TIME);
                 break;
             case R.id.open_after_doing:
@@ -97,11 +111,14 @@ public class WechatSettingsActivity extends RedPacketActivity implements View.On
     private void showGrapModeDialog() {
         BaseDialog.Builder builder = new BaseDialog.Builder(this, R.style.Dialog_SingleChoice);
         builder.setTitle(R.string.grab_mode);
-        String[] list = getResources().getStringArray(R.array.wechat_grap_mode_list);
-        builder.setSingleChoiceItems(list, 0, new DialogInterface.OnClickListener() {
+        int mode = mConfig.getWechatMode();
+        final String[] list = getResources().getStringArray(R.array.wechat_grap_mode_list);
+        builder.setSingleChoiceItems(list, mode, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-
+                mConfig.setWechatMode(which);
+                mGrapMode.setSubTitle(list[which]);
+                dialog.dismiss();
             }
         });
         builder.setNegativeButton(R.string.cancel, null);
@@ -110,31 +127,40 @@ public class WechatSettingsActivity extends RedPacketActivity implements View.On
 
 
     private void showOpenAfterActionDialog() {
-        BaseDialog.Builder builder = new BaseDialog.Builder(this, R.style.Dialog_SingleChoice);
-        builder.setTitle(R.string.open_after_doing);
-        String[] list = getResources().getStringArray(R.array.wechat_open_after_mode_list);
-        builder.setSingleChoiceItems(list, 0, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-
-            }
-        });
-        builder.setNegativeButton(R.string.cancel, null);
-        builder.create().show();
+        int mode = mConfig.getWechatAfterGetHongBaoEvent();
+        final String[] list = getResources().getStringArray(R.array.wechat_open_after_mode_list);
+        final BaseDialog dialog = new BaseDialog.Builder(this, R.style.Dialog_SingleChoice)
+                .setTitle(R.string.open_after_doing)
+                .setSingleChoiceItems(list, mode, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        mConfig.setWechatAfterGetHongBaoEvent(which);
+                        mOpenAfterAtion.setSubTitle(list[which]);
+                        dialog.dismiss();
+                    }
+                })
+                .setNegativeButton(R.string.cancel, null)
+                .create();
+        dialog.show();
     }
 
     private void showGrapAfterActionDialog() {
-        BaseDialog.Builder builder = new BaseDialog.Builder(this, R.style.Dialog_SingleChoice);
-        builder.setTitle(R.string.grab_after_doing);
-        String[] list = getResources().getStringArray(R.array.wechat_grab_after_mode_list);
-        builder.setSingleChoiceItems(list, 0, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
+        final int mode = mConfig.getWechatAfterOpenHongBaoEvent();
+        final String[] list = getResources().getStringArray(R.array.wechat_grab_after_mode_list);
+        final BaseDialog dialog = new BaseDialog.Builder(this, R.style.Dialog_SingleChoice)
+                .setTitle(R.string.grab_after_doing)
+                .setSingleChoiceItems(list, mode, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        mConfig.setWechatAfterOpenHongBaoEvent(which);
+                        mGrapAfterAtion.setSubTitle(list[which]);
+                        dialog.dismiss();
+                    }
+                })
+                .setNegativeButton(R.string.cancel, null)
+                .create();
 
-            }
-        });
-        builder.setNegativeButton(R.string.cancel, null);
-        builder.create().show();
+        dialog.show();
     }
 
 
@@ -153,72 +179,10 @@ public class WechatSettingsActivity extends RedPacketActivity implements View.On
                 }
                 String time = data.getStringExtra(DelayTimeActivity.DELAY_TIME);
                 mDelayTime.setSubTitle(time);
+                mConfig.setWechatOpenDelayTime(time);
                 break;
         }
 
     }
 
-    public static class WechatSettingsFragment extends RedPacketPreferenceFragment {
-
-        @Override
-        public void onCreate(Bundle savedInstanceState) {
-            super.onCreate(savedInstanceState);
-            addPreferencesFromResource(R.xml.wechat_settings);
-
-            //微信红包模式
-            final ListPreference wxMode = (ListPreference) findPreference(Config.KEY_WECHAT_MODE);
-            wxMode.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-                @Override
-                public boolean onPreferenceChange(Preference preference, Object newValue) {
-                    int value = Integer.parseInt(String.valueOf(newValue));
-                    preference.setSummary(wxMode.getEntries()[value]);
-                    return true;
-                }
-            });
-            wxMode.setSummary(wxMode.getEntries()[Integer.parseInt(wxMode.getValue())]);
-
-            //打开微信红包后
-            final ListPreference wxAfterOpenPre = (ListPreference) findPreference(Config.KEY_WECHAT_AFTER_OPEN_HONGBAO);
-            wxAfterOpenPre.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-                @Override
-                public boolean onPreferenceChange(Preference preference, Object newValue) {
-                    int value = Integer.parseInt(String.valueOf(newValue));
-                    preference.setSummary(wxAfterOpenPre.getEntries()[value]);
-                    return true;
-                }
-            });
-            wxAfterOpenPre.setSummary(wxAfterOpenPre.getEntries()[Integer.parseInt(wxAfterOpenPre.getValue())]);
-
-            //获取微信红包后
-            final ListPreference wxAfterGetPre = (ListPreference) findPreference(Config.KEY_WECHAT_AFTER_GET_HONGBAO);
-            wxAfterGetPre.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-                @Override
-                public boolean onPreferenceChange(Preference preference, Object newValue) {
-                    int value = Integer.parseInt(String.valueOf(newValue));
-                    preference.setSummary(wxAfterGetPre.getEntries()[value]);
-                    return true;
-                }
-            });
-            wxAfterGetPre.setSummary(wxAfterGetPre.getEntries()[Integer.parseInt(wxAfterGetPre.getValue())]);
-
-            final EditTextPreference delayEditTextPre = (EditTextPreference) findPreference(Config.KEY_WECHAT_DELAY_TIME);
-            delayEditTextPre.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-                @Override
-                public boolean onPreferenceChange(Preference preference, Object newValue) {
-                    if ("0".equals(String.valueOf(newValue))) {
-                        preference.setSummary("");
-                    } else {
-                        preference.setSummary("已延时" + newValue + "毫秒");
-                    }
-                    return true;
-                }
-            });
-            String delay = delayEditTextPre.getText();
-            if ("0".equals(String.valueOf(delay))) {
-                delayEditTextPre.setSummary("");
-            } else {
-                delayEditTextPre.setSummary("已延时" + delay + "毫秒");
-            }
-        }
-    }
 }
