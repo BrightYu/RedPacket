@@ -238,7 +238,7 @@ public class WechatAccessbilityJob extends BaseAccessbilityJob {
         } else if ("com.tencent.mm.plugin.luckymoney.ui.LuckyMoneyDetailUI".equals(event.getClassName())) {
             mCurrentWindow = WINDOW_LUCKYMONEY_DETAIL;
             //拆完红包后看详细的纪录界面
-            if (getConfig().getWechatAfterGetHongBaoEvent() == Config.WX_AFTER_GET_GOHOME) { //返回主界面，以便收到下一次的红包通知
+            if (getConfig().getWechatAfterOpenHongBaoEvent() == Config.WX_AFTER_GET_GOHOME) { //返回主界面，以便收到下一次的红包通知
                 AccessibilityHelper.performHome(getService());
             }
         } else if ("com.tencent.mm.ui.LauncherUI".equals(event.getClassName())) {
@@ -262,8 +262,7 @@ public class WechatAccessbilityJob extends BaseAccessbilityJob {
         }
 
         AccessibilityNodeInfo targetNode = null;
-
-        int event = getConfig().getWechatAfterOpenHongBaoEvent();
+        int event = getConfig().getWechatAfterGetHongBaoEvent();
         int wechatVersion = getWechatVersion();
         if (event == Config.WX_AFTER_OPEN_HONGBAO) { //拆红包
             if (wechatVersion < USE_ID_MIN_VERSION) {

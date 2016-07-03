@@ -122,7 +122,7 @@ public class Config {
      * 微信打开红包后延时时间
      */
     public int getWechatOpenDelayTime() {
-        int defaultValue = 0;
+        int defaultValue = 200;
         String result = preferences.getString(KEY_WECHAT_DELAY_TIME, String.valueOf(defaultValue));
         try {
             return Integer.parseInt(result);

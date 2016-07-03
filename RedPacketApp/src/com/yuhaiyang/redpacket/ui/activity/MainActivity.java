@@ -37,6 +37,7 @@ import android.widget.Toast;
 
 import com.bright.common.widget.SwitchButton;
 import com.bright.common.widget.TopBar;
+import com.bright.common.widget.YToast;
 import com.bright.common.widget.dialog.BaseDialog;
 import com.yuhaiyang.redpacket.Config;
 import com.yuhaiyang.redpacket.R;
@@ -91,6 +92,9 @@ public class MainActivity extends RedPacketActivity implements View.OnClickListe
 
         mNotifyServerControl = (SwitchButton) findViewById(R.id.notify_server_control);
         mNotifyServerControl.setOnCheckedChangeListener(this);
+
+        View notifySettings = findViewById(R.id.nofiy_settings);
+        notifySettings.setOnClickListener(this);
 
         View wechatSettings = findViewById(R.id.wechat_setting);
         wechatSettings.setOnClickListener(this);
@@ -156,6 +160,7 @@ public class MainActivity extends RedPacketActivity implements View.OnClickListe
                 openAccessibilityServiceSettings();
                 break;
             case R.id.menu_notify:
+            case R.id.nofiy_settings:
                 openNotificationServiceSettings();
                 break;
             case R.id.wechat_setting:
@@ -317,6 +322,10 @@ public class MainActivity extends RedPacketActivity implements View.OnClickListe
                 mConfig.setWechatEnalbe(isChecked);
                 break;
             case R.id.notify_server_control:
+                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR2) {
+                    YToast.makeText(this, R.string.tip_notif_can_not_open, Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 updateNotifiyContrlSettings(isChecked);
                 mConfig.setNotificationServiceEnable(isChecked);
                 break;

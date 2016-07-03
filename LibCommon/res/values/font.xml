@@ -28,6 +28,6 @@
     <dimen name="K_title">@dimen/dp_8</dimen>
     <dimen name="L_title">@dimen/dp_6</dimen>
 
-    <dimen name="topbar_title">@dimen/G_title</dimen>
+    <dimen name="topbar_title">@dimen/F_title</dimen>
     <dimen name="topbar_sub_title">@dimen/H_title</dimen>
 </resources>
