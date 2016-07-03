@@ -18,8 +18,7 @@ import android.view.accessibility.AccessibilityEvent;
 import android.view.accessibility.AccessibilityNodeInfo;
 
 import com.yuhaiyang.redpacket.BuildConfig;
-import com.yuhaiyang.redpacket.Config;
-import com.yuhaiyang.redpacket.IStatusBarNotification;
+import com.yuhaiyang.redpacket.constant.Config;
 import com.yuhaiyang.redpacket.ui.service.RedPacketService;
 import com.yuhaiyang.redpacket.util.AccessibilityHelper;
 import com.yuhaiyang.redpacket.util.NotifyHelper;
@@ -61,7 +60,7 @@ public class WechatAccessbilityJob extends BaseAccessbilityJob {
     private PackageInfo mWechatPackageInfo = null;
     private Handler mHandler = null;
 
-    private BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
+    private BroadcastReceiver mReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             //更新安装包信息
@@ -81,13 +80,13 @@ public class WechatAccessbilityJob extends BaseAccessbilityJob {
         filter.addAction("android.intent.action.PACKAGE_REPLACED");
         filter.addAction("android.intent.action.PACKAGE_REMOVED");
 
-        getContext().registerReceiver(broadcastReceiver, filter);
+        getContext().registerReceiver(mReceiver, filter);
     }
 
     @Override
     public void onStopJob() {
         try {
-            getContext().unregisterReceiver(broadcastReceiver);
+            getContext().unregisterReceiver(mReceiver);
         } catch (Exception e) {
         }
     }

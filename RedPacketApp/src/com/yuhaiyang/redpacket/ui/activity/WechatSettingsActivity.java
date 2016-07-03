@@ -26,7 +26,7 @@ import android.view.View;
 
 import com.bright.common.widget.TopBar;
 import com.bright.common.widget.dialog.BaseDialog;
-import com.yuhaiyang.redpacket.Config;
+import com.yuhaiyang.redpacket.constant.Config;
 import com.yuhaiyang.redpacket.R;
 import com.yuhaiyang.redpacket.ui.activity.base.RedPacketActivity;
 import com.yuhaiyang.redpacket.ui.widget.NormalPreference;

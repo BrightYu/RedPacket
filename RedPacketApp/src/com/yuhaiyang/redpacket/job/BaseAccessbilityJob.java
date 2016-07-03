@@ -2,7 +2,7 @@ package com.yuhaiyang.redpacket.job;
 
 import android.content.Context;
 
-import com.yuhaiyang.redpacket.Config;
+import com.yuhaiyang.redpacket.constant.Config;
 import com.yuhaiyang.redpacket.ui.service.RedPacketService;
 
 public abstract class BaseAccessbilityJob implements IAccessbilityJob {

@@ -2,7 +2,6 @@ package com.yuhaiyang.redpacket.job;
 
 import android.view.accessibility.AccessibilityEvent;
 
-import com.yuhaiyang.redpacket.IStatusBarNotification;
 import com.yuhaiyang.redpacket.ui.service.RedPacketService;
 
 public interface IAccessbilityJob {

@@ -39,7 +39,7 @@ import com.bright.common.widget.SwitchButton;
 import com.bright.common.widget.TopBar;
 import com.bright.common.widget.YToast;
 import com.bright.common.widget.dialog.BaseDialog;
-import com.yuhaiyang.redpacket.Config;
+import com.yuhaiyang.redpacket.constant.Config;
 import com.yuhaiyang.redpacket.R;
 import com.yuhaiyang.redpacket.ui.activity.base.RedPacketActivity;
 import com.yuhaiyang.redpacket.ui.service.RedPacketService;

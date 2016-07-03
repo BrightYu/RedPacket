@@ -25,8 +25,8 @@ import android.service.notification.StatusBarNotification;
 import android.util.Log;
 
 import com.yuhaiyang.redpacket.BuildConfig;
-import com.yuhaiyang.redpacket.Config;
-import com.yuhaiyang.redpacket.IStatusBarNotification;
+import com.yuhaiyang.redpacket.constant.Config;
+import com.yuhaiyang.redpacket.job.IStatusBarNotification;
 
 
 @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR2)

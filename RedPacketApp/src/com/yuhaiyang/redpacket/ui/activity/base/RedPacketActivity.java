@@ -27,7 +27,7 @@ import com.bright.common.BaseActivity;
 import com.bright.common.utils.PackagesUtils;
 import com.bright.common.utils.http.okhttp.OkHttpUtils;
 import com.bright.common.widget.dialog.BaseDialog;
-import com.yuhaiyang.redpacket.Config;
+import com.yuhaiyang.redpacket.constant.Config;
 import com.yuhaiyang.redpacket.R;
 
 

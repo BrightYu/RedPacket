@@ -22,6 +22,7 @@ import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.accessibility.AccessibilityEvent;
 import android.view.accessibility.AccessibilityManager;
@@ -29,8 +30,8 @@ import android.widget.Toast;
 
 import com.bright.common.widget.YToast;
 import com.yuhaiyang.redpacket.BuildConfig;
-import com.yuhaiyang.redpacket.Config;
-import com.yuhaiyang.redpacket.IStatusBarNotification;
+import com.yuhaiyang.redpacket.constant.Config;
+import com.yuhaiyang.redpacket.job.IStatusBarNotification;
 import com.yuhaiyang.redpacket.job.IAccessbilityJob;
 import com.yuhaiyang.redpacket.job.WechatAccessbilityJob;
 
@@ -110,7 +111,7 @@ public class RedPacketService extends AccessibilityService {
     protected void onServiceConnected() {
         super.onServiceConnected();
         service = this;
-        //发送广播，已经连接上了
+        //发送广播，已经连接上了 通知UI更新界面
         Intent intent = new Intent(Config.ACTION_QIANGHONGBAO_SERVICE_CONNECT);
         sendBroadcast(intent);
         YToast.makeText(this, "已连接抢红包服务", Toast.LENGTH_SHORT).show();
@@ -121,13 +122,13 @@ public class RedPacketService extends AccessibilityService {
         if (BuildConfig.DEBUG) {
             Log.d(TAG, "事件--->" + event);
         }
-        String pkn = String.valueOf(event.getPackageName());
+        String eventPackage = String.valueOf(event.getPackageName());
         if (mAccessbilityJobs != null && !mAccessbilityJobs.isEmpty()) {
             if (!getConfig().isAgreement()) {
                 return;
             }
             for (IAccessbilityJob job : mAccessbilityJobs) {
-                if (pkn.equals(job.getTargetPackageName()) && job.isEnable()) {
+                if (TextUtils.equals(eventPackage, job.getTargetPackageName()) && job.isEnable()) {
                     job.onReceiveJob(event);
                 }
             }
@@ -138,7 +139,9 @@ public class RedPacketService extends AccessibilityService {
         return Config.getConfig(this);
     }
 
-    /** 接收通知栏事件*/
+    /**
+     * 接收通知栏事件
+     */
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR2)
     public static void handeNotificationPosted(IStatusBarNotification notificationService) {
         if (notificationService == null) {
@@ -157,7 +160,7 @@ public class RedPacketService extends AccessibilityService {
 
     /**
      * 判断当前服务是否正在运行
-     * */
+     */
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     public static boolean isRunning() {
         if (service == null) {
@@ -185,7 +188,9 @@ public class RedPacketService extends AccessibilityService {
         return true;
     }
 
-    /** 快速读取通知栏服务是否启动*/
+    /**
+     * 快速读取通知栏服务是否启动
+     */
     public static boolean isNotificationServiceRunning() {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR2) {
             return false;

@@ -9,7 +9,7 @@ import android.os.Build;
 import android.os.PowerManager;
 import android.os.Vibrator;
 
-import com.yuhaiyang.redpacket.Config;
+import com.yuhaiyang.redpacket.constant.Config;
 
 import java.util.Calendar;
 
