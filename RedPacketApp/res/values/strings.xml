@@ -47,4 +47,5 @@
     <string name="grab_after_mode_2">静静地看着</string>
     <string name="save">保存</string>
     <string name="tip_notif_can_not_open">该功能只支持安卓4.3以上的系统</string>
+    <string name="tip_delay_time">提示：设置延迟时间可以防止封号</string>
 </resources>

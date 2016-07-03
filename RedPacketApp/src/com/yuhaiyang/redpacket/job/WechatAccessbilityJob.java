@@ -236,10 +236,6 @@ public class WechatAccessbilityJob extends BaseAccessbilityJob {
             handleLuckyMoneyReceive();
         } else if ("com.tencent.mm.plugin.luckymoney.ui.LuckyMoneyDetailUI".equals(event.getClassName())) {
             mCurrentWindow = WINDOW_LUCKYMONEY_DETAIL;
-            //拆完红包后看详细的纪录界面
-            if (getConfig().getWechatAfterOpenHongBaoEvent() == Config.WX_AFTER_GET_GOHOME) { //返回主界面，以便收到下一次的红包通知
-                AccessibilityHelper.performHome(getService());
-            }
         } else if ("com.tencent.mm.ui.LauncherUI".equals(event.getClassName())) {
             mCurrentWindow = WINDOW_LAUNCHER;
             //在聊天界面,去点中红包

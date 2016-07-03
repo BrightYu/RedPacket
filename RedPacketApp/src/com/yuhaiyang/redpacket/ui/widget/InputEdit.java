@@ -27,7 +27,6 @@ import android.text.TextWatcher;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.FrameLayout;
@@ -149,6 +148,15 @@ public class InputEdit extends FrameLayout implements View.OnClickListener, View
         });
     }
 
+    public void showInput(int time) {
+        postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                mInputMethodManager.showSoftInput(mInputView, 0);
+            }
+        }, time);
+    }
+
     public void setCallBack(CallBack callBack) {
         mCallBack = callBack;
     }
@@ -162,6 +170,11 @@ public class InputEdit extends FrameLayout implements View.OnClickListener, View
     public void focus() {
         mInputView.requestFocus();
         showInput();
+    }
+
+    public void focus(int delayTime) {
+        mInputView.requestFocus();
+        showInput(delayTime);
     }
 
     public boolean hasFocus() {

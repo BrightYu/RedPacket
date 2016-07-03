@@ -26,8 +26,8 @@ import android.view.View;
 
 import com.bright.common.widget.TopBar;
 import com.bright.common.widget.dialog.BaseDialog;
-import com.yuhaiyang.redpacket.constant.Config;
 import com.yuhaiyang.redpacket.R;
+import com.yuhaiyang.redpacket.constant.Config;
 import com.yuhaiyang.redpacket.ui.activity.base.RedPacketActivity;
 import com.yuhaiyang.redpacket.ui.widget.NormalPreference;
 
@@ -36,7 +36,6 @@ public class WechatSettingsActivity extends RedPacketActivity implements View.On
     private NormalPreference mGrapMode;
     private NormalPreference mDelayTime;
     private NormalPreference mOpenAfterAtion;
-    private NormalPreference mGrapAfterAtion;
 
     private final static int REQUEST_DELAY_TIME = 1;
     private Config mConfig;
@@ -67,9 +66,6 @@ public class WechatSettingsActivity extends RedPacketActivity implements View.On
         mOpenAfterAtion = (NormalPreference) findViewById(R.id.open_after_doing);
         mOpenAfterAtion.setOnClickListener(this);
 
-        mGrapAfterAtion = (NormalPreference) findViewById(R.id.grab_after_doing);
-        mGrapAfterAtion.setOnClickListener(this);
-
     }
 
     @Override
@@ -83,8 +79,6 @@ public class WechatSettingsActivity extends RedPacketActivity implements View.On
         list = getResources().getStringArray(R.array.wechat_open_after_mode_list);
         mOpenAfterAtion.setSubTitle(list[mConfig.getWechatAfterGetHongBaoEvent()]);
 
-        list = getResources().getStringArray(R.array.wechat_grab_after_mode_list);
-        mGrapAfterAtion.setSubTitle(list[mConfig.getWechatAfterOpenHongBaoEvent()]);
     }
 
     @Override
@@ -101,9 +95,7 @@ public class WechatSettingsActivity extends RedPacketActivity implements View.On
             case R.id.open_after_doing:
                 showOpenAfterActionDialog();
                 break;
-            case R.id.grab_after_doing:
-                showGrapAfterActionDialog();
-                break;
+
         }
     }
 
@@ -143,26 +135,6 @@ public class WechatSettingsActivity extends RedPacketActivity implements View.On
                 .create();
         dialog.show();
     }
-
-    private void showGrapAfterActionDialog() {
-        final int mode = mConfig.getWechatAfterOpenHongBaoEvent();
-        final String[] list = getResources().getStringArray(R.array.wechat_grab_after_mode_list);
-        final BaseDialog dialog = new BaseDialog.Builder(this, R.style.Dialog_SingleChoice)
-                .setTitle(R.string.grab_after_doing)
-                .setSingleChoiceItems(list, mode, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        mConfig.setWechatAfterOpenHongBaoEvent(which);
-                        mGrapAfterAtion.setSubTitle(list[which]);
-                        dialog.dismiss();
-                    }
-                })
-                .setNegativeButton(R.string.cancel, null)
-                .create();
-
-        dialog.show();
-    }
-
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {

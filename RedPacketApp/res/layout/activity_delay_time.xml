@@ -27,6 +27,14 @@
         app:rightText="@string/save"
         app:text="@string/set_delay_time_title" />
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/gap_grade_2"
+        android:text="@string/tip_delay_time"
+        android:textColor="@color/text_color_light_normal"
+        android:textSize="@dimen/I_title" />
+
     <com.yuhaiyang.redpacket.ui.widget.InputEdit
         android:id="@+id/time"
         android:layout_width="match_parent"
