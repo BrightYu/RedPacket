@@ -14,13 +14,28 @@
  * limitations under the License.
  */
 
-package com.yuhaiyang.redpacket.constant;
+package com.yuhaiyang.redpacket.modem;
 
-public class Config {
+/**
+ * 微信的模型
+ */
+public class Notification {
 
-    public static final String ACTION_QIANGHONGBAO_SERVICE_DISCONNECT = "com.codeboy.qianghongbao.ACCESSBILITY_DISCONNECT";
-    public static final String ACTION_QIANGHONGBAO_SERVICE_CONNECT = "com.codeboy.qianghongbao.ACCESSBILITY_CONNECT";
 
-    public static final String ACTION_NOTIFY_LISTENER_SERVICE_DISCONNECT = "com.codeboy.qianghongbao.NOTIFY_LISTENER_DISCONNECT";
-    public static final String ACTION_NOTIFY_LISTENER_SERVICE_CONNECT = "com.codeboy.qianghongbao.NOTIFY_LISTENER_CONNECT";
+    public static final class Key {
+        /**
+         * 是否开启了监听
+         */
+        public static final String ENABLE = "key_enable_notification";
+        /**
+         * 是否声音
+         */
+        public static final String ENABLE_NOTIFY_SOUND = "key_enable_notif_sound";
+        /**
+         * 是否开启振动
+         */
+        public static final String ENABLE_NOTIFY_VIBRATE = "key_enable_notif_vibrate";
+
+    }
+
 }

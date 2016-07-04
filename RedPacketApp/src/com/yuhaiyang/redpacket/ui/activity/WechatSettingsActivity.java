@@ -26,7 +26,6 @@ import android.view.View;
 import com.bright.common.utils.Utils;
 import com.bright.common.widget.TopBar;
 import com.yuhaiyang.redpacket.R;
-import com.yuhaiyang.redpacket.constant.Config;
 import com.yuhaiyang.redpacket.manager.WeChatManager;
 import com.yuhaiyang.redpacket.modem.WeChat;
 import com.yuhaiyang.redpacket.modem.WeChatSelect;
@@ -45,7 +44,6 @@ public class WechatSettingsActivity extends RedPacketActivity implements View.On
     private NormalPreference mOpenAfterAtion;
 
     private final static int REQUEST_DELAY_TIME = 1;
-    private Config mConfig;
     private WeChatManager mWeChatManager;
 
     private List<ISelect> mGrapModes;
@@ -56,7 +54,6 @@ public class WechatSettingsActivity extends RedPacketActivity implements View.On
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_wechat_settigns);
         mWeChatManager = WeChatManager.getInstance(this);
-        mConfig = Config.getConfig(this);
     }
 
     @Override

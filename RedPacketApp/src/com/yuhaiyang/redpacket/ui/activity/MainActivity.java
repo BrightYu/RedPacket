@@ -1,12 +1,12 @@
 /**
  * Copyright (C) 2016 The yuhaiyang Android Source Project
- * <p>
+ * <p/>
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * <p>
+ * <p/>
  * http://www.apache.org/licenses/LICENSE-2.0
- * <p>
+ * <p/>
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -41,6 +41,7 @@ import com.bright.common.widget.YToast;
 import com.bright.common.widget.dialog.BaseDialog;
 import com.yuhaiyang.redpacket.R;
 import com.yuhaiyang.redpacket.constant.Config;
+import com.yuhaiyang.redpacket.manager.NotificationManager;
 import com.yuhaiyang.redpacket.manager.WeChatManager;
 import com.yuhaiyang.redpacket.ui.activity.base.RedPacketActivity;
 import com.yuhaiyang.redpacket.ui.service.RedPacketService;
@@ -57,8 +58,8 @@ public class MainActivity extends RedPacketActivity implements View.OnClickListe
     private SwitchButton mMainServerControl;
     private SwitchButton mNotifyServerControl;
 
-    private Config mConfig;
     private WeChatManager mWeChatManager;
+    private NotificationManager mNotificationManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,7 +68,7 @@ public class MainActivity extends RedPacketActivity implements View.OnClickListe
 
         registerReceiver();
         mWeChatManager = WeChatManager.getInstance(this);
-        mConfig = Config.getConfig(this);
+        mNotificationManager = NotificationManager.getInstance(this);
     }
 
 
@@ -108,24 +109,15 @@ public class MainActivity extends RedPacketActivity implements View.OnClickListe
     protected void onResume() {
         super.onResume();
 
+        mMainServerControl.setChecked(mWeChatManager.isEnabled());
         updateNotifyControl();
 
         if (RedPacketService.isRunning()) {
-            if (mTipsDialog != null) {
-                mTipsDialog.dismiss();
-            }
+            dismissTipDialog();
         } else {
-            showOpenAccessibilityServiceDialog();
+            showTipDialog();
         }
 
-        // 是否同意免责
-        boolean isAgreement = Config.getConfig(this).isAgreement();
-        if (!isAgreement) {
-            showAgreementDialog();
-        }
-
-        mMainServerControl.setChecked(mWeChatManager.isEnable());
-        mNotifyServerControl.setChecked(mConfig.isEnableNotificationService());
     }
 
     @Override
@@ -182,10 +174,10 @@ public class MainActivity extends RedPacketActivity implements View.OnClickListe
         switch (buttonView.getId()) {
             case R.id.main_server_control:
                 if (isChecked && !RedPacketService.isRunning()) {
-                    showOpenAccessibilityServiceDialog();
+                    showTipDialog();
                 }
 
-                mWeChatManager.setEnalbe(isChecked);
+                mWeChatManager.setEnabled(isChecked);
                 break;
             case R.id.notify_server_control:
                 if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR2) {
@@ -194,7 +186,7 @@ public class MainActivity extends RedPacketActivity implements View.OnClickListe
                 }
                 mNotificationChangeByUser = true;
                 updateNotifiyContrlSettings(isChecked);
-                mConfig.setNotificationServiceEnable(isChecked);
+                mNotificationManager.setEnabled(isChecked);
                 break;
         }
     }
@@ -202,7 +194,7 @@ public class MainActivity extends RedPacketActivity implements View.OnClickListe
     /**
      * 显示未开启辅助服务的对话框
      */
-    private void showOpenAccessibilityServiceDialog() {
+    private void showTipDialog() {
         if (mTipsDialog != null && mTipsDialog.isShowing()) {
             return;
         }
@@ -215,6 +207,7 @@ public class MainActivity extends RedPacketActivity implements View.OnClickListe
         });
         BaseDialog.Builder builder = new BaseDialog.Builder(this);
         builder.setView(view);
+        builder.setCancelable(false);
         builder.setPositiveButton(R.string.open_service_button, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -222,6 +215,13 @@ public class MainActivity extends RedPacketActivity implements View.OnClickListe
             }
         });
         mTipsDialog = builder.show();
+    }
+
+    private void dismissTipDialog() {
+        if (mTipsDialog != null && mTipsDialog.isShowing()) {
+            mTipsDialog.dismiss();
+            mTipsDialog = null;
+        }
     }
 
     /**
@@ -253,7 +253,7 @@ public class MainActivity extends RedPacketActivity implements View.OnClickListe
 
     private void updateNotifyControl() {
         boolean running = RedPacketService.isNotificationServiceRunning();
-        boolean enable = Config.getConfig(this).isEnableNotificationService();
+        boolean enable = mNotificationManager.isEnabled();
         if (enable && running && !mNotifyServerControl.isChecked()) {
             mNotifyServerControl.setChecked(true);
         } else if ((!enable || !running) && mNotifyServerControl.isChecked()) {
@@ -272,7 +272,7 @@ public class MainActivity extends RedPacketActivity implements View.OnClickListe
             return;
         }
 
-        Config.getConfig(this).setNotificationServiceEnable(isChecked);
+        mNotificationManager.setEnabled(isChecked);
 
         if (isChecked && !RedPacketService.isNotificationServiceRunning()) {
             openNotificationServiceSettings();
@@ -326,7 +326,7 @@ public class MainActivity extends RedPacketActivity implements View.OnClickListe
                     mTipsDialog.dismiss();
                 }
             } else if (Config.ACTION_QIANGHONGBAO_SERVICE_DISCONNECT.equals(action)) {
-                showOpenAccessibilityServiceDialog();
+                showTipDialog();
             } else if (Config.ACTION_NOTIFY_LISTENER_SERVICE_CONNECT.equals(action)) {
                 mNotificationChangeByUser = false;
                 updateNotifyControl();

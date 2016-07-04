@@ -17,10 +17,6 @@ public abstract class BaseAccessbilityJob implements IAccessbilityJob {
     }
 
 
-    public Config getConfig() {
-        return mRedPacketService.getConfig();
-    }
-
     public RedPacketService getService() {
         return mRedPacketService;
     }

@@ -102,29 +102,4 @@ public class RedPacketActivity extends BaseActivity {
         // 版本名称不相等且版本code比上一个版本大 才进行走ViewPager
         return (!TextUtils.equals(versionName, _versionName) && _version > version);
     }
-
-
-    /**
-     * 显示免责声明的对话框
-     */
-    protected void showAgreementDialog() {
-        BaseDialog.Builder builder = new BaseDialog.Builder(this);
-        builder.setCancelable(false);
-        builder.setTitle(R.string.agreement_title);
-        builder.setMessage(getString(R.string.agreement_message, getString(R.string.app_name)));
-        builder.setPositiveButton(R.string.agree, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                Config.getConfig(getApplicationContext()).setAgreement(true);
-            }
-        });
-        builder.setNegativeButton(R.string.disagree, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                Config.getConfig(getApplicationContext()).setAgreement(false);
-                finish();
-            }
-        });
-        builder.show();
-    }
 }

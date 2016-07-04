@@ -18,7 +18,7 @@ import android.view.accessibility.AccessibilityEvent;
 import android.view.accessibility.AccessibilityNodeInfo;
 
 import com.yuhaiyang.redpacket.BuildConfig;
-import com.yuhaiyang.redpacket.constant.Config;
+import com.yuhaiyang.redpacket.manager.NotificationManager;
 import com.yuhaiyang.redpacket.manager.WeChatManager;
 import com.yuhaiyang.redpacket.modem.WeChat;
 import com.yuhaiyang.redpacket.ui.service.RedPacketService;
@@ -63,6 +63,7 @@ public class WechatAccessbilityJob extends BaseAccessbilityJob {
     private Handler mHandler = null;
 
     private WeChatManager mWeChatManager;
+    private NotificationManager mNotificationManager;
 
     private BroadcastReceiver mReceiver = new BroadcastReceiver() {
         @Override
@@ -76,6 +77,8 @@ public class WechatAccessbilityJob extends BaseAccessbilityJob {
     public void onCreateJob(RedPacketService service) {
         super.onCreateJob(service);
         mWeChatManager = WeChatManager.getInstance(mContext);
+        mNotificationManager = NotificationManager.getInstance(mContext);
+
         updatePackageInfo();
 
         registerReceiver();
@@ -99,7 +102,7 @@ public class WechatAccessbilityJob extends BaseAccessbilityJob {
 
     @Override
     public boolean isEnable() {
-        return mWeChatManager.isEnable();
+        return mWeChatManager.isEnabled();
     }
 
     @Override
@@ -116,7 +119,7 @@ public class WechatAccessbilityJob extends BaseAccessbilityJob {
             if (data == null || !(data instanceof Notification)) {
                 return;
             }
-            if (RedPacketService.isNotificationServiceRunning() && getConfig().isEnableNotificationService()) { //开启快速模式，不处理
+            if (RedPacketService.isNotificationServiceRunning() && mNotificationManager.isEnabled()) { //开启快速模式，不处理
                 return;
             }
             List<CharSequence> texts = event.getText();
@@ -222,7 +225,7 @@ public class WechatAccessbilityJob extends BaseAccessbilityJob {
         }
 
         if (lock || mWeChatManager.getGrapMode() != WeChat.Configure.GRAP_MODE_AUTO) {
-            NotifyHelper.playEffect(mContext, getConfig());
+            NotifyHelper.playEffect(mContext, mNotificationManager);
         }
     }
 
@@ -257,7 +260,7 @@ public class WechatAccessbilityJob extends BaseAccessbilityJob {
         AccessibilityNodeInfo targetNode = null;
         int event = mWeChatManager.getGetHongBaoAfterEvent();
         int wechatVersion = getWechatVersion();
-        if (event == Config.WX_AFTER_OPEN_HONGBAO) { //拆红包
+        if (event == WeChat.Configure.GET_AFTER_HONGBAO_EVENT_OPEN) { //拆红包
             if (wechatVersion < USE_ID_MIN_VERSION) {
                 targetNode = AccessibilityHelper.findNodeInfosByText(nodeInfo, "拆红包");
             } else {
@@ -290,11 +293,11 @@ public class WechatAccessbilityJob extends BaseAccessbilityJob {
                     targetNode = AccessibilityHelper.findNodeInfosByClassName(nodeInfo, BUTTON_CLASS_NAME);
                 }
             }
-        } else if (event == Config.WX_AFTER_OPEN_SEE) { //看一看
+        } else if (event == WeChat.Configure.GET_AFTER_HONGBAO_EVENT_SEE) { //看一看
             if (getWechatVersion() < USE_ID_MIN_VERSION) { //低版本才有 看大家手气的功能
                 targetNode = AccessibilityHelper.findNodeInfosByText(nodeInfo, "看看大家的手气");
             }
-        } else if (event == Config.WX_AFTER_OPEN_NONE) {
+        } else if (event == WeChat.Configure.GET_AFTER_HONGBAO_EVENT_NONE) {
             return;
         }
 

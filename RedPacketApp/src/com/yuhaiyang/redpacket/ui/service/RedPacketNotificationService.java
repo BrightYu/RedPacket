@@ -27,6 +27,7 @@ import android.util.Log;
 import com.yuhaiyang.redpacket.BuildConfig;
 import com.yuhaiyang.redpacket.constant.Config;
 import com.yuhaiyang.redpacket.job.IStatusBarNotification;
+import com.yuhaiyang.redpacket.manager.NotificationManager;
 
 
 @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR2)
@@ -34,6 +35,7 @@ public class RedPacketNotificationService extends NotificationListenerService {
     private static final String TAG = "NotificationService";
 
     private static RedPacketNotificationService service;
+    private NotificationManager mNotificationManager;
 
     @Override
     public void onCreate() {
@@ -41,10 +43,7 @@ public class RedPacketNotificationService extends NotificationListenerService {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
             onListenerConnected();
         }
-    }
-
-    private Config getConfig() {
-        return Config.getConfig(this);
+        mNotificationManager = NotificationManager.getInstance(this);
     }
 
     @Override
@@ -52,10 +51,7 @@ public class RedPacketNotificationService extends NotificationListenerService {
         if (BuildConfig.DEBUG) {
             Log.i(TAG, "onNotificationRemoved");
         }
-        if (!getConfig().isAgreement()) {
-            return;
-        }
-        if (!getConfig().isEnableNotificationService()) {
+        if (!mNotificationManager.isEnabled()) {
             return;
         }
         RedPacketService.handeNotificationPosted(new IStatusBarNotification() {

@@ -31,8 +31,8 @@ import android.widget.Toast;
 import com.bright.common.widget.YToast;
 import com.yuhaiyang.redpacket.BuildConfig;
 import com.yuhaiyang.redpacket.constant.Config;
-import com.yuhaiyang.redpacket.job.IStatusBarNotification;
 import com.yuhaiyang.redpacket.job.IAccessbilityJob;
+import com.yuhaiyang.redpacket.job.IStatusBarNotification;
 import com.yuhaiyang.redpacket.job.WechatAccessbilityJob;
 
 import java.util.ArrayList;
@@ -124,19 +124,12 @@ public class RedPacketService extends AccessibilityService {
         }
         String eventPackage = String.valueOf(event.getPackageName());
         if (mAccessbilityJobs != null && !mAccessbilityJobs.isEmpty()) {
-            if (!getConfig().isAgreement()) {
-                return;
-            }
             for (IAccessbilityJob job : mAccessbilityJobs) {
                 if (TextUtils.equals(eventPackage, job.getTargetPackageName()) && job.isEnable()) {
                     job.onReceiveJob(event);
                 }
             }
         }
-    }
-
-    public Config getConfig() {
-        return Config.getConfig(this);
     }
 
     /**

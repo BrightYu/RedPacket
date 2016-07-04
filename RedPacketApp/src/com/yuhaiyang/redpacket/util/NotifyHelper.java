@@ -9,7 +9,7 @@ import android.os.Build;
 import android.os.PowerManager;
 import android.os.Vibrator;
 
-import com.yuhaiyang.redpacket.constant.Config;
+import com.yuhaiyang.redpacket.manager.NotificationManager;
 
 import java.util.Calendar;
 
@@ -90,16 +90,12 @@ public class NotifyHelper {
     /**
      * 播放效果、声音与震动
      */
-    public static void playEffect(Context context, Config config) {
-        //夜间模式，不处理
-        if (NotifyHelper.isNightTime() && config.isNotifyNight()) {
-            return;
-        }
+    public static void playEffect(Context context, NotificationManager manager) {
 
-        if (config.isNotifySound()) {
+        if (manager.isEnabledSound()) {
             sound(context);
         }
-        if (config.isNotifyVibrate()) {
+        if (manager.isEnabledVibrate()) {
             vibrator(context);
         }
     }
