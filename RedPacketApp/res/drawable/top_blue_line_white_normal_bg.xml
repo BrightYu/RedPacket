@@ -20,7 +20,7 @@
         android:left="-2dp"
         android:right="-2dp">
         <shape>
-
+            <solid android:color="@color/windows_background_light" />
             <stroke
                 android:width="1px"
                 android:color="@color/blue_400" />

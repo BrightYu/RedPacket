@@ -102,6 +102,8 @@
     <style name="Dialog.Bottom">
         <item name="android:windowBackground">@drawable/corner_top_5dp_normal</item>
         <item name="android:listDivider">@color/line</item>
+        <!-- Activity 进出动画 -->
+        <item name="android:windowAnimationStyle">@style/BottomAnimation</item>
         <!--Settings the Dialog Title-->
         <item name="android:listPreferredItemHeightSmall">@dimen/dp_55</item>
         <item name="dialogTitleStyle">@style/BaseDialog.Title.Bottom</item>

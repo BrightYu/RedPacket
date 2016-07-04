@@ -20,10 +20,12 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.graphics.drawable.DrawerArrowDrawable;
+import android.util.Log;
 import android.view.View;
 
 import com.bright.common.widget.TopBar;
 import com.yuhaiyang.redpacket.R;
+import com.yuhaiyang.redpacket.modem.WeChat;
 import com.yuhaiyang.redpacket.ui.activity.base.RedPacketActivity;
 import com.yuhaiyang.redpacket.ui.widget.InputEdit;
 
@@ -38,8 +40,8 @@ public class DelayTimeActivity extends RedPacketActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_delay_time);
-        String time = getIntent().getStringExtra(DELAY_TIME);
-        mTimeInput.setInputText(time);
+        int time = getIntent().getIntExtra(DELAY_TIME, 0);
+        mTimeInput.setInputText(String.valueOf(time));
         mTimeInput.focus(800);
     }
 
@@ -66,7 +68,11 @@ public class DelayTimeActivity extends RedPacketActivity {
     public void onRightClick(View v) {
         super.onRightClick(v);
         Intent intent = new Intent();
-        intent.putExtra(DELAY_TIME, mTimeInput.getInputText());
+        try {
+            intent.putExtra(DELAY_TIME, Integer.valueOf(mTimeInput.getInputText()));
+        } catch (Exception e) {
+            intent.putExtra(DELAY_TIME, WeChat.Configure.DEFAULT_DELAY_TIME);
+        }
         setResult(RESULT_OK, intent);
         this.finish();
     }

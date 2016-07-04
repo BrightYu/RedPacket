@@ -41,6 +41,7 @@
         android:paddingRight="@dimen/gap_grade_2"
         android:singleLine="true"
         android:textColorHint="@color/text_color_hint"
+        android:textCursorDrawable="@drawable/input_line"
         android:textSize="@dimen/H_title" />
 
     <ImageButton

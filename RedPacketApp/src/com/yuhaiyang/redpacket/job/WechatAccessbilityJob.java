@@ -19,6 +19,8 @@ import android.view.accessibility.AccessibilityNodeInfo;
 
 import com.yuhaiyang.redpacket.BuildConfig;
 import com.yuhaiyang.redpacket.constant.Config;
+import com.yuhaiyang.redpacket.manager.WeChatManager;
+import com.yuhaiyang.redpacket.modem.WeChat;
 import com.yuhaiyang.redpacket.ui.service.RedPacketService;
 import com.yuhaiyang.redpacket.util.AccessibilityHelper;
 import com.yuhaiyang.redpacket.util.NotifyHelper;
@@ -60,6 +62,8 @@ public class WechatAccessbilityJob extends BaseAccessbilityJob {
     private PackageInfo mWechatPackageInfo = null;
     private Handler mHandler = null;
 
+    private WeChatManager mWeChatManager;
+
     private BroadcastReceiver mReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -71,22 +75,16 @@ public class WechatAccessbilityJob extends BaseAccessbilityJob {
     @Override
     public void onCreateJob(RedPacketService service) {
         super.onCreateJob(service);
-
+        mWeChatManager = WeChatManager.getInstance(mContext);
         updatePackageInfo();
 
-        IntentFilter filter = new IntentFilter();
-        filter.addDataScheme("package");
-        filter.addAction("android.intent.action.PACKAGE_ADDED");
-        filter.addAction("android.intent.action.PACKAGE_REPLACED");
-        filter.addAction("android.intent.action.PACKAGE_REMOVED");
-
-        getContext().registerReceiver(mReceiver, filter);
+        registerReceiver();
     }
 
     @Override
     public void onStopJob() {
         try {
-            getContext().unregisterReceiver(mReceiver);
+            mContext.unregisterReceiver(mReceiver);
         } catch (Exception e) {
         }
     }
@@ -101,7 +99,7 @@ public class WechatAccessbilityJob extends BaseAccessbilityJob {
 
     @Override
     public boolean isEnable() {
-        return getConfig().isEnableWechat();
+        return mWeChatManager.isEnable();
     }
 
     @Override
@@ -215,16 +213,16 @@ public class WechatAccessbilityJob extends BaseAccessbilityJob {
         isReceivingHongbao = true;
         //以下是精华，将微信的通知栏消息打开
         PendingIntent pendingIntent = notification.contentIntent;
-        boolean lock = NotifyHelper.isLockScreen(getContext());
+        boolean lock = NotifyHelper.isLockScreen(mContext);
 
         if (!lock) {
             NotifyHelper.send(pendingIntent);
         } else {
-            NotifyHelper.showNotify(getContext(), String.valueOf(notification.tickerText), pendingIntent);
+            NotifyHelper.showNotify(mContext, String.valueOf(notification.tickerText), pendingIntent);
         }
 
-        if (lock || getConfig().getWechatMode() != Config.WX_MODE_0) {
-            NotifyHelper.playEffect(getContext(), getConfig());
+        if (lock || mWeChatManager.getGrapMode() != WeChat.Configure.GRAP_MODE_AUTO) {
+            NotifyHelper.playEffect(mContext, getConfig());
         }
     }
 
@@ -257,7 +255,7 @@ public class WechatAccessbilityJob extends BaseAccessbilityJob {
         }
 
         AccessibilityNodeInfo targetNode = null;
-        int event = getConfig().getWechatAfterGetHongBaoEvent();
+        int event = mWeChatManager.getGetHongBaoAfterEvent();
         int wechatVersion = getWechatVersion();
         if (event == Config.WX_AFTER_OPEN_HONGBAO) { //拆红包
             if (wechatVersion < USE_ID_MIN_VERSION) {
@@ -302,7 +300,7 @@ public class WechatAccessbilityJob extends BaseAccessbilityJob {
 
         if (targetNode != null) {
             final AccessibilityNodeInfo n = targetNode;
-            long sDelayTime = getConfig().getWechatOpenDelayTime();
+            long sDelayTime = mWeChatManager.getOpenDelayTime();
             if (sDelayTime != 0) {
                 getHandler().postDelayed(new Runnable() {
                     @Override
@@ -322,8 +320,9 @@ public class WechatAccessbilityJob extends BaseAccessbilityJob {
      */
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR2)
     private void handleChatListHongBao() {
-        int mode = getConfig().getWechatMode();
-        if (mode == Config.WX_MODE_3) { //只通知模式
+
+        int mode = mWeChatManager.getGrapMode();
+        if (mode == WeChat.Configure.GRAP_MODE_MANUAL) { //只通知模式
             return;
         }
 
@@ -333,11 +332,11 @@ public class WechatAccessbilityJob extends BaseAccessbilityJob {
             return;
         }
 
-        if (mode != Config.WX_MODE_0) {
+        if (mode != WeChat.Configure.GRAP_MODE_AUTO) {
             boolean isMember = isMemberChatUi(nodeInfo);
-            if (mode == Config.WX_MODE_1 && isMember) {//过滤群聊
+            if (mode == WeChat.Configure.GRAP_MODE_SINGLE_CHAT && isMember) {//过滤群聊
                 return;
-            } else if (mode == Config.WX_MODE_2 && !isMember) { //过滤单聊
+            } else if (mode == WeChat.Configure.GRAP_MODE_GROUP_CHAT && !isMember) { //过滤单聊
                 return;
             }
         }
@@ -386,9 +385,19 @@ public class WechatAccessbilityJob extends BaseAccessbilityJob {
      */
     private void updatePackageInfo() {
         try {
-            mWechatPackageInfo = getContext().getPackageManager().getPackageInfo(WECHAT_PACKAGENAME, 0);
+            mWechatPackageInfo = mContext.getPackageManager().getPackageInfo(WECHAT_PACKAGENAME, 0);
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
         }
+    }
+
+    private void registerReceiver() {
+        Log.i(TAG, "registerReceiver: ");
+        IntentFilter filter = new IntentFilter();
+        filter.addDataScheme("package");
+        filter.addAction(Intent.ACTION_PACKAGE_ADDED);
+        filter.addAction(Intent.ACTION_PACKAGE_REPLACED);
+        filter.addAction(Intent.ACTION_PACKAGE_REMOVED);
+        mContext.registerReceiver(mReceiver, filter);
     }
 }

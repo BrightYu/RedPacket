@@ -1,17 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="app_name">抢红包</string>
-    <string name="main_name">抢红包</string>
     <string name="accessibility_description">启动抢红包服务，支持微信。</string>
     <string name="service_name">抢红包</string>
     <string name="open_service_button">打开抢红包服务</string>
     <string name="open_notify_service">打开通知栏服务</string>
-    <string name="check_update">检查更新</string>
-    <string name="share">分享</string>
     <string name="tips">找到[抢红包]，然后开启服务即可</string>
-    <string name="qq_settings">QQ设置</string>
     <string name="wechat_settings">微信设置</string>
-    <string name="notify_settings">红包提醒设置</string>
 
     <string name="agreement_title">免责声明</string>
     <string name="agreement_message">本软件仅供学习使用，完全模拟人工操作，抢红包速度取决于你手机的性能与网络，不涉及任何第三方软件接口，本软件已开放源代码，无病毒、不收集用户隐私信息，禁止使用本软件参与赌博活动。一切因使用“%1$s”造成的任何后果，%1$s概不负责，亦不承担任何法律责任!</string>
@@ -29,23 +24,21 @@
     <string name="unsport_notifi">快速监听通知栏功能只支持安卓4.3以上的系统</string>
 
     <string name="grab_mode">抢红包模式</string>
-    <string name="grap_mode_0">自动抢</string>
-    <string name="grap_mode_1">抢单聊红包，群聊红包只通知</string>
-    <string name="grap_mode_2">抢群聊红包，单聊红包只通知</string>
-    <string name="grap_mode_3">通知手动抢(防封号)</string>
+    <string name="grap_mode_auto_description">自动抢</string>
+    <string name="grap_mode_single_chat_description">只抢单聊红包</string>
+    <string name="grap_mode_group_chat_description">只抢群聊红包</string>
+    <string name="grap_mode_manual_description">通知手动抢</string>
 
     <string name="set_delay_time_title">延迟时间</string>
-    <string name="set_delay_time_subtitle">设置延迟时间可以预防封号</string>
+    <string name="set_delay_time_subtitle">请输入延迟时间(单位毫秒)</string>
 
-    <string name="open_after_doing">打开红包后</string>
-    <string name="open_after_mode_1">拆红包</string>
-    <string name="open_after_mode_2">看看大家的手气</string>
-    <string name="open_after_mode_3">静静地看着</string>
+    <string name="get_after_doing">打开红包后</string>
+    <string name="get_after_mode_open_description">拆红包</string>
+    <string name="get_after_mode_see_description">看看大家的手气</string>
+    <string name="get_after_mode_none_description">静静地看着</string>
 
-    <string name="grab_after_doing">抢到红包后</string>
-    <string name="grab_after_mode_1">返回桌面</string>
-    <string name="grab_after_mode_2">静静地看着</string>
     <string name="save">保存</string>
     <string name="tip_notif_can_not_open">该功能只支持安卓4.3以上的系统</string>
     <string name="tip_delay_time">提示：设置延迟时间可以防止封号</string>
+    <string name="link_delay_unit"><xliff:g id="date">%s</xliff:g> 毫秒</string>
 </resources>

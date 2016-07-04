@@ -7,22 +7,21 @@ import com.yuhaiyang.redpacket.ui.service.RedPacketService;
 
 public abstract class BaseAccessbilityJob implements IAccessbilityJob {
 
-    private RedPacketService service;
+    private RedPacketService mRedPacketService;
+    protected Context mContext;
 
     @Override
     public void onCreateJob(RedPacketService service) {
-        this.service = service;
+        mRedPacketService = service;
+        mContext = service.getApplicationContext();
     }
 
-    public Context getContext() {
-        return service.getApplicationContext();
-    }
 
     public Config getConfig() {
-        return service.getConfig();
+        return mRedPacketService.getConfig();
     }
 
     public RedPacketService getService() {
-        return service;
+        return mRedPacketService;
     }
 }

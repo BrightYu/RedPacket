@@ -1,12 +1,12 @@
 /**
  * Copyright (C) 2016 The yuhaiyang Android Source Project
- * <p>
+ * <p/>
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * <p>
+ * <p/>
  * http://www.apache.org/licenses/LICENSE-2.0
- * <p>
+ * <p/>
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -47,14 +47,6 @@ public class Config {
     public static final int WX_AFTER_OPEN_SEE = 1; //看大家手气
     public static final int WX_AFTER_OPEN_NONE = 2; //静静地看着
 
-    public static final int WX_AFTER_GET_GOHOME = 0; //返回桌面
-    public static final int WX_AFTER_GET_NONE = 1;
-
-    public static final int WX_MODE_0 = 0;//自动抢
-    public static final int WX_MODE_1 = 1;//抢单聊红包,群聊红包只通知
-    public static final int WX_MODE_2 = 2;//抢群聊红包,单聊红包只通知
-    public static final int WX_MODE_3 = 3;//通知手动抢
-
     private static Config current;
 
     public static synchronized Config getConfig(Context context) {
@@ -70,82 +62,6 @@ public class Config {
     private Config(Context context) {
         mContext = context;
         preferences = context.getSharedPreferences(PREFERENCE_NAME, Context.MODE_PRIVATE);
-    }
-
-
-    public void setWechatEnalbe(boolean enable) {
-        preferences.edit().putBoolean(KEY_ENABLE_WECHAT, enable).apply();
-    }
-
-    /**
-     * 是否启动微信抢红包
-     */
-    public boolean isEnableWechat() {
-        return preferences.getBoolean(KEY_ENABLE_WECHAT, true);
-    }
-
-
-    /**
-     * 设置微信抢到红包后的事件
-     */
-    public void setWechatAfterGetHongBaoEvent(int mode) {
-        preferences.edit().putString(KEY_WECHAT_AFTER_GET_HONGBAO, String.valueOf(mode)).apply();
-    }
-
-
-    /**
-     * 微信抢到红包后的事件
-     */
-    public int getWechatAfterGetHongBaoEvent() {
-        int defaultValue = WX_AFTER_OPEN_HONGBAO;
-        String result = preferences.getString(KEY_WECHAT_AFTER_GET_HONGBAO, String.valueOf(defaultValue));
-        try {
-            return Integer.parseInt(result);
-        } catch (Exception e) {
-        }
-        return defaultValue;
-    }
-
-    /**
-     * 微信打开红包后延时时间
-     */
-    public void setWechatOpenDelayTime(String time) {
-        preferences.edit().putString(KEY_WECHAT_DELAY_TIME, time).apply();
-    }
-
-
-    /**
-     * 微信打开红包后延时时间
-     */
-    public int getWechatOpenDelayTime() {
-        int defaultValue = 200;
-        String result = preferences.getString(KEY_WECHAT_DELAY_TIME, String.valueOf(defaultValue));
-        try {
-            return Integer.parseInt(result);
-        } catch (Exception e) {
-        }
-        return defaultValue;
-    }
-
-
-    /**
-     * 设置微信红包的模式
-     */
-    public void setWechatMode(int mode) {
-        preferences.edit().putString(KEY_WECHAT_MODE, String.valueOf(mode)).apply();
-    }
-
-    /**
-     * 获取抢微信红包的模式
-     */
-    public int getWechatMode() {
-        int defaultValue = 0;
-        String result = preferences.getString(KEY_WECHAT_MODE, String.valueOf(defaultValue));
-        try {
-            return Integer.parseInt(result);
-        } catch (Exception e) {
-        }
-        return defaultValue;
     }
 
     /**

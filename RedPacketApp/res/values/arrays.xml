@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string-array name="wechat_open_after_mode_list">
-        <item>@string/open_after_mode_1</item>
-        <item>@string/open_after_mode_2</item>
-        <item>@string/open_after_mode_3</item>
+        <item>@string/get_after_mode_open_description</item>
+        <item>@string/get_after_mode_see_description</item>
+        <item>@string/get_after_mode_none_description</item>
     </string-array>
 
     <string-array name="wechat_after_open_settings_values">
@@ -12,21 +12,16 @@
         <item>2</item>
     </string-array>
 
-    <string-array name="wechat_grab_after_mode_list">
-        <item>@string/grab_after_mode_1</item>
-        <item>@string/grab_after_mode_2</item>
-    </string-array>
-
     <string-array name="wechat_after_get_settings_values">
         <item>0</item>
         <item>1</item>
     </string-array>
 
     <string-array name="wechat_grap_mode_list">
-        <item>@string/grap_mode_0</item>
-        <item>@string/grap_mode_1</item>
-        <item>@string/grap_mode_2</item>
-        <item>@string/grap_mode_3</item>
+        <item>@string/grap_mode_auto_description</item>
+        <item>@string/grap_mode_single_chat_description</item>
+        <item>@string/grap_mode_group_chat_description</item>
+        <item>@string/grap_mode_manual_description</item>
     </string-array>
 
     <string-array name="wechat_mode_settings_values">

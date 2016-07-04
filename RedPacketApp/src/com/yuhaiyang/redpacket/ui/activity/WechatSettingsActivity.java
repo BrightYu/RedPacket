@@ -1,12 +1,12 @@
 /**
  * Copyright (C) 2016 The yuhaiyang Android Source Project
- * <p>
+ * <p/>
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * <p>
+ * <p/>
  * http://www.apache.org/licenses/LICENSE-2.0
- * <p>
+ * <p/>
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -16,7 +16,6 @@
 
 package com.yuhaiyang.redpacket.ui.activity;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -24,12 +23,20 @@ import android.support.v7.graphics.drawable.DrawerArrowDrawable;
 import android.util.Log;
 import android.view.View;
 
+import com.bright.common.utils.Utils;
 import com.bright.common.widget.TopBar;
-import com.bright.common.widget.dialog.BaseDialog;
 import com.yuhaiyang.redpacket.R;
 import com.yuhaiyang.redpacket.constant.Config;
+import com.yuhaiyang.redpacket.manager.WeChatManager;
+import com.yuhaiyang.redpacket.modem.WeChat;
+import com.yuhaiyang.redpacket.modem.WeChatSelect;
+import com.yuhaiyang.redpacket.modem.interfaces.ISelect;
 import com.yuhaiyang.redpacket.ui.activity.base.RedPacketActivity;
+import com.yuhaiyang.redpacket.ui.dialog.SelectDialog;
 import com.yuhaiyang.redpacket.ui.widget.NormalPreference;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class WechatSettingsActivity extends RedPacketActivity implements View.OnClickListener {
     private static final String TAG = "WechatSettingsActivity";
@@ -39,11 +46,16 @@ public class WechatSettingsActivity extends RedPacketActivity implements View.On
 
     private final static int REQUEST_DELAY_TIME = 1;
     private Config mConfig;
+    private WeChatManager mWeChatManager;
+
+    private List<ISelect> mGrapModes;
+    private List<ISelect> mGetHongBaoEvents;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_wechat_settigns);
+        mWeChatManager = WeChatManager.getInstance(this);
         mConfig = Config.getConfig(this);
     }
 
@@ -71,14 +83,9 @@ public class WechatSettingsActivity extends RedPacketActivity implements View.On
     @Override
     protected void onResume() {
         super.onResume();
-        String[] list = getResources().getStringArray(R.array.wechat_grap_mode_list);
-        mGrapMode.setSubTitle(list[mConfig.getWechatMode()]);
-
-        mDelayTime.setSubTitle(String.valueOf(mConfig.getWechatOpenDelayTime()));
-
-        list = getResources().getStringArray(R.array.wechat_open_after_mode_list);
-        mOpenAfterAtion.setSubTitle(list[mConfig.getWechatAfterGetHongBaoEvent()]);
-
+        mGrapMode.setSubTitle(getSelectedGrapModeDescription());
+        mDelayTime.setSubTitle(getString(R.string.link_delay_unit, mWeChatManager.getOpenDelayTime()));
+        mOpenAfterAtion.setSubTitle(getGetHongbaoEventDescription());
     }
 
     @Override
@@ -89,7 +96,7 @@ public class WechatSettingsActivity extends RedPacketActivity implements View.On
                 break;
             case R.id.grab_delay_time:
                 Intent intent = new Intent(this, DelayTimeActivity.class);
-                intent.putExtra(DelayTimeActivity.DELAY_TIME, mDelayTime.getSubText());
+                intent.putExtra(DelayTimeActivity.DELAY_TIME, mWeChatManager.getOpenDelayTime());
                 startActivityForResult(intent, REQUEST_DELAY_TIME);
                 break;
             case R.id.open_after_doing:
@@ -101,40 +108,79 @@ public class WechatSettingsActivity extends RedPacketActivity implements View.On
 
 
     private void showGrapModeDialog() {
-        BaseDialog.Builder builder = new BaseDialog.Builder(this, R.style.Dialog_SingleChoice);
-        builder.setTitle(R.string.grab_mode);
-        int mode = mConfig.getWechatMode();
-        final String[] list = getResources().getStringArray(R.array.wechat_grap_mode_list);
-        builder.setSingleChoiceItems(list, mode, new DialogInterface.OnClickListener() {
+        int mode = mWeChatManager.getGrapMode();
+        SelectDialog dialog = new SelectDialog(this);
+        dialog.setTitle(R.string.grab_mode);
+        dialog.setData(getGrapMode(), mode);
+        dialog.show();
+        dialog.setCallBack(new SelectDialog.CallBack() {
             @Override
-            public void onClick(DialogInterface dialog, int which) {
-                mConfig.setWechatMode(which);
-                mGrapMode.setSubTitle(list[which]);
-                dialog.dismiss();
+            public void select(ISelect select) {
+                mWeChatManager.setGrapMode(select.getId());
+                mGrapMode.setSubTitle(select.getDescription());
             }
         });
-        builder.setNegativeButton(R.string.cancel, null);
-        builder.create().show();
+    }
+
+    private List<ISelect> getGrapMode() {
+        if (mGrapModes == null) {
+            mGrapModes = new ArrayList<>();
+            mGrapModes.add(new WeChatSelect(WeChat.Configure.GRAP_MODE_AUTO, getString(R.string.grap_mode_auto_description)));
+            mGrapModes.add(new WeChatSelect(WeChat.Configure.GRAP_MODE_SINGLE_CHAT, getString(R.string.grap_mode_single_chat_description)));
+            mGrapModes.add(new WeChatSelect(WeChat.Configure.GRAP_MODE_GROUP_CHAT, getString(R.string.grap_mode_group_chat_description)));
+            mGrapModes.add(new WeChatSelect(WeChat.Configure.GRAP_MODE_MANUAL, getString(R.string.grap_mode_manual_description)));
+        }
+        return mGrapModes;
+    }
+
+    private String getSelectedGrapModeDescription() {
+        getGrapMode();
+        int mode = mWeChatManager.getGrapMode();
+        for (ISelect select : mGrapModes) {
+            if (select.getId() == mode) {
+                return select.getDescription();
+            }
+        }
+        return Utils.EMPTY;
     }
 
 
     private void showOpenAfterActionDialog() {
-        int mode = mConfig.getWechatAfterGetHongBaoEvent();
-        final String[] list = getResources().getStringArray(R.array.wechat_open_after_mode_list);
-        final BaseDialog dialog = new BaseDialog.Builder(this, R.style.Dialog_SingleChoice)
-                .setTitle(R.string.open_after_doing)
-                .setSingleChoiceItems(list, mode, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        mConfig.setWechatAfterGetHongBaoEvent(which);
-                        mOpenAfterAtion.setSubTitle(list[which]);
-                        dialog.dismiss();
-                    }
-                })
-                .setNegativeButton(R.string.cancel, null)
-                .create();
+        int mode = mWeChatManager.getGetHongBaoAfterEvent();
+        SelectDialog dialog = new SelectDialog(this);
+        dialog.setTitle(R.string.get_after_doing);
+        dialog.setData(getGetHongbaoAfterEvent(), mode);
         dialog.show();
+        dialog.setCallBack(new SelectDialog.CallBack() {
+            @Override
+            public void select(ISelect select) {
+                mWeChatManager.setGetHongBaoAfterEvent(select.getId());
+                mOpenAfterAtion.setSubTitle(select.getDescription());
+            }
+        });
     }
+
+    private List<ISelect> getGetHongbaoAfterEvent() {
+        if (mGetHongBaoEvents == null) {
+            mGetHongBaoEvents = new ArrayList<>();
+            mGetHongBaoEvents.add(new WeChatSelect(WeChat.Configure.GET_AFTER_HONGBAO_EVENT_OPEN, getString(R.string.get_after_mode_open_description)));
+            mGetHongBaoEvents.add(new WeChatSelect(WeChat.Configure.GET_AFTER_HONGBAO_EVENT_SEE, getString(R.string.get_after_mode_see_description)));
+            mGetHongBaoEvents.add(new WeChatSelect(WeChat.Configure.GET_AFTER_HONGBAO_EVENT_NONE, getString(R.string.get_after_mode_none_description)));
+        }
+        return mGetHongBaoEvents;
+    }
+
+    private String getGetHongbaoEventDescription() {
+        getGetHongbaoAfterEvent();
+        int mode = mWeChatManager.getGetHongBaoAfterEvent();
+        for (ISelect select : mGetHongBaoEvents) {
+            if (select.getId() == mode) {
+                return select.getDescription();
+            }
+        }
+        return Utils.EMPTY;
+    }
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -149,9 +195,9 @@ public class WechatSettingsActivity extends RedPacketActivity implements View.On
                     Log.i(TAG, "onActivityResult:  data is null");
                     return;
                 }
-                String time = data.getStringExtra(DelayTimeActivity.DELAY_TIME);
-                mDelayTime.setSubTitle(time);
-                mConfig.setWechatOpenDelayTime(time);
+                int time = data.getIntExtra(DelayTimeActivity.DELAY_TIME, WeChat.Configure.DEFAULT_DELAY_TIME);
+                mDelayTime.setSubTitle(getString(R.string.link_delay_unit, time));
+                mWeChatManager.setOpenDelayTime(time);
                 break;
         }
 

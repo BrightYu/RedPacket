@@ -16,7 +16,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/bottom_line_normal_bg"
-        app:subText="@string/grap_mode_0"
+        app:subText="@string/grap_mode_auto_description"
         app:text="@string/grab_mode" />
 
     <com.yuhaiyang.redpacket.ui.widget.NormalPreference
@@ -32,7 +32,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/bottom_line_normal_bg"
-        app:subText="@string/open_after_mode_1"
-        app:text="@string/open_after_doing" />
+        app:subText="@string/get_after_mode_open_description"
+        app:text="@string/get_after_doing" />
 
 </LinearLayout>

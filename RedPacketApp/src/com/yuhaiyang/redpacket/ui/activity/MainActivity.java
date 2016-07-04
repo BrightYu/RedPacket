@@ -1,12 +1,12 @@
 /**
  * Copyright (C) 2016 The yuhaiyang Android Source Project
- * <p>
+ * <p/>
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * <p>
+ * <p/>
  * http://www.apache.org/licenses/LICENSE-2.0
- * <p>
+ * <p/>
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -39,37 +39,34 @@ import com.bright.common.widget.SwitchButton;
 import com.bright.common.widget.TopBar;
 import com.bright.common.widget.YToast;
 import com.bright.common.widget.dialog.BaseDialog;
-import com.yuhaiyang.redpacket.constant.Config;
 import com.yuhaiyang.redpacket.R;
+import com.yuhaiyang.redpacket.constant.Config;
+import com.yuhaiyang.redpacket.manager.WeChatManager;
 import com.yuhaiyang.redpacket.ui.activity.base.RedPacketActivity;
 import com.yuhaiyang.redpacket.ui.service.RedPacketService;
 
 public class MainActivity extends RedPacketActivity implements View.OnClickListener, CompoundButton.OnCheckedChangeListener {
     private static final String TAG = "MainActivity";
-    private Dialog mTipsDialog;
-    private TopBar mTopBar;
-    private DrawerLayout mContent;
     private DrawerArrowDrawable mArrowDrawable;
     private long mLastTime;
     private boolean mNotificationChangeByUser;
 
+
+    private Dialog mTipsDialog;
+    private DrawerLayout mContent;
     private SwitchButton mMainServerControl;
     private SwitchButton mNotifyServerControl;
 
     private Config mConfig;
+    private WeChatManager mWeChatManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        IntentFilter filter = new IntentFilter();
-        filter.addAction(Config.ACTION_QIANGHONGBAO_SERVICE_CONNECT);
-        filter.addAction(Config.ACTION_QIANGHONGBAO_SERVICE_DISCONNECT);
-        filter.addAction(Config.ACTION_NOTIFY_LISTENER_SERVICE_DISCONNECT);
-        filter.addAction(Config.ACTION_NOTIFY_LISTENER_SERVICE_CONNECT);
-        registerReceiver(mConnectReceiver, filter);
-
+        registerReceiver();
+        mWeChatManager = WeChatManager.getInstance(this);
         mConfig = Config.getConfig(this);
     }
 
@@ -79,13 +76,13 @@ public class MainActivity extends RedPacketActivity implements View.OnClickListe
         super.initViews();
         mArrowDrawable = new DrawerArrowDrawable(this);
         mArrowDrawable.setColor(Color.WHITE);
-        mTopBar = (TopBar) findViewById(R.id.top_bar);
-        mTopBar.setOnTopBarListener(this);
-        mTopBar.setLeftImageDrawable(mArrowDrawable);
+
+        TopBar topBar = (TopBar) findViewById(R.id.top_bar);
+        topBar.setOnTopBarListener(this);
+        topBar.setLeftImageDrawable(mArrowDrawable);
 
         mContent = (DrawerLayout) findViewById(R.id.content);
         mContent.addDrawerListener(mDrawerListener);
-
 
         mMainServerControl = (SwitchButton) findViewById(R.id.main_server_control);
         mMainServerControl.setOnCheckedChangeListener(this);
@@ -127,7 +124,7 @@ public class MainActivity extends RedPacketActivity implements View.OnClickListe
             showAgreementDialog();
         }
 
-        mMainServerControl.setChecked(mConfig.isEnableWechat());
+        mMainServerControl.setChecked(mWeChatManager.isEnable());
         mNotifyServerControl.setChecked(mConfig.isEnableNotificationService());
     }
 
@@ -180,6 +177,26 @@ public class MainActivity extends RedPacketActivity implements View.OnClickListe
         }
     }
 
+    @Override
+    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+        switch (buttonView.getId()) {
+            case R.id.main_server_control:
+                if (isChecked && !RedPacketService.isRunning()) {
+                    showOpenAccessibilityServiceDialog();
+                }
+
+                mWeChatManager.setEnalbe(isChecked);
+                break;
+            case R.id.notify_server_control:
+                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR2) {
+                    YToast.makeText(this, R.string.tip_notif_can_not_open, Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                updateNotifiyContrlSettings(isChecked);
+                mConfig.setNotificationServiceEnable(isChecked);
+                break;
+        }
+    }
 
     /**
      * 显示未开启辅助服务的对话框
@@ -261,6 +278,15 @@ public class MainActivity extends RedPacketActivity implements View.OnClickListe
         }
     }
 
+    private void registerReceiver() {
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(Config.ACTION_QIANGHONGBAO_SERVICE_CONNECT);
+        filter.addAction(Config.ACTION_QIANGHONGBAO_SERVICE_DISCONNECT);
+        filter.addAction(Config.ACTION_NOTIFY_LISTENER_SERVICE_DISCONNECT);
+        filter.addAction(Config.ACTION_NOTIFY_LISTENER_SERVICE_CONNECT);
+        registerReceiver(mConnectReceiver, filter);
+    }
+
     private DrawerLayout.DrawerListener mDrawerListener = new DrawerLayout.DrawerListener() {
         @Override
         public void onDrawerSlide(View drawerView, float slideOffset) {
@@ -311,24 +337,4 @@ public class MainActivity extends RedPacketActivity implements View.OnClickListe
     };
 
 
-    @Override
-    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-        switch (buttonView.getId()) {
-            case R.id.main_server_control:
-                if (isChecked && !RedPacketService.isRunning()) {
-                    showOpenAccessibilityServiceDialog();
-                }
-
-                mConfig.setWechatEnalbe(isChecked);
-                break;
-            case R.id.notify_server_control:
-                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR2) {
-                    YToast.makeText(this, R.string.tip_notif_can_not_open, Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                updateNotifiyContrlSettings(isChecked);
-                mConfig.setNotificationServiceEnable(isChecked);
-                break;
-        }
-    }
 }
