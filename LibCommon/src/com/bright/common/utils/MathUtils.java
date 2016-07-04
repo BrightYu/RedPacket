@@ -7,8 +7,14 @@ import java.text.DecimalFormat;
  * 一个计算的工具
  */
 public class MathUtils {
-
-    public static final String FORMAT_HEADER = "###0.";
+    /**
+     * Format的头部
+     */
+    public static final String FORMAT_HEADER = "###0";
+    /**
+     * Format的的小数点
+     */
+    public static final String FORMAT_POINT = ".";
 
     /**
      * 提供精确的加法运算。
@@ -111,10 +117,12 @@ public class MathUtils {
             throw new IllegalArgumentException("The scale must be a positive integer or zero");
         }
         String pattern;
-        if (force) {
-            pattern = Utils.plusString(FORMAT_HEADER, generateString(scale, "0"));
+        if (scale == 0) {
+            pattern = FORMAT_HEADER;
+        } else if (force) {
+            pattern = Utils.plusString(FORMAT_HEADER, FORMAT_POINT, generateString(scale, "0"));
         } else {
-            pattern = Utils.plusString(FORMAT_HEADER, generateString(scale, "#"));
+            pattern = Utils.plusString(FORMAT_HEADER, FORMAT_POINT, generateString(scale, "#"));
         }
         DecimalFormat format = new DecimalFormat(pattern);
         return format.format(v);
