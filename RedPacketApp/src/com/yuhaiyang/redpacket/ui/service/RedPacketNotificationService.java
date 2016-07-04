@@ -86,7 +86,7 @@ public class RedPacketNotificationService extends NotificationListenerService {
         Log.i(TAG, "onListenerConnected");
         service = this;
         //发送广播，已经连接上了
-        Intent intent = new Intent(Config.ACTION_NOTIFY_LISTENER_SERVICE_CONNECT);
+        Intent intent = new Intent(Config.ACTION_NOTIFY_SERVICE_CONNECT);
         sendBroadcast(intent);
     }
 
@@ -96,7 +96,7 @@ public class RedPacketNotificationService extends NotificationListenerService {
         Log.i(TAG, "onDestroy");
         service = null;
         //发送广播，已经连接上了
-        Intent intent = new Intent(Config.ACTION_NOTIFY_LISTENER_SERVICE_DISCONNECT);
+        Intent intent = new Intent(Config.ACTION_NOTIFY_ERVICE_DISCONNECT);
         sendBroadcast(intent);
     }
 

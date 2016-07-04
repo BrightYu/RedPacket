@@ -283,8 +283,8 @@ public class MainActivity extends RedPacketActivity implements View.OnClickListe
         IntentFilter filter = new IntentFilter();
         filter.addAction(Config.ACTION_QIANGHONGBAO_SERVICE_CONNECT);
         filter.addAction(Config.ACTION_QIANGHONGBAO_SERVICE_DISCONNECT);
-        filter.addAction(Config.ACTION_NOTIFY_LISTENER_SERVICE_DISCONNECT);
-        filter.addAction(Config.ACTION_NOTIFY_LISTENER_SERVICE_CONNECT);
+        filter.addAction(Config.ACTION_NOTIFY_ERVICE_DISCONNECT);
+        filter.addAction(Config.ACTION_NOTIFY_SERVICE_CONNECT);
         registerReceiver(mConnectReceiver, filter);
     }
 
@@ -327,10 +327,10 @@ public class MainActivity extends RedPacketActivity implements View.OnClickListe
                 }
             } else if (Config.ACTION_QIANGHONGBAO_SERVICE_DISCONNECT.equals(action)) {
                 showTipDialog();
-            } else if (Config.ACTION_NOTIFY_LISTENER_SERVICE_CONNECT.equals(action)) {
+            } else if (Config.ACTION_NOTIFY_SERVICE_CONNECT.equals(action)) {
                 mNotificationChangeByUser = false;
                 updateNotifyControl();
-            } else if (Config.ACTION_NOTIFY_LISTENER_SERVICE_DISCONNECT.equals(action)) {
+            } else if (Config.ACTION_NOTIFY_ERVICE_DISCONNECT.equals(action)) {
                 mNotificationChangeByUser = false;
                 updateNotifyControl();
             }
