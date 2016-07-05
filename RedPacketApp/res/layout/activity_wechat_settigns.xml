@@ -35,4 +35,12 @@
         app:subText="@string/get_after_mode_open_description"
         app:text="@string/get_after_doing" />
 
+    <com.yuhaiyang.redpacket.ui.widget.NormalPreference
+        android:id="@+id/view_version_info"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bottom_line_normal_bg"
+        android:visibility="gone"
+        app:text="@string/view_version_info" />
+
 </LinearLayout>

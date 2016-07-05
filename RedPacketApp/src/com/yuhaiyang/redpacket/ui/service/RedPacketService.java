@@ -1,12 +1,12 @@
 /**
  * Copyright (C) 2016 The yuhaiyang Android Source Project
- * <p/>
+ * <p>
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * <p/>
+ * <p>
  * http://www.apache.org/licenses/LICENSE-2.0
- * <p/>
+ * <p>
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -29,11 +29,11 @@ import android.view.accessibility.AccessibilityManager;
 import android.widget.Toast;
 
 import com.bright.common.widget.YToast;
-import com.yuhaiyang.redpacket.BuildConfig;
+import com.yuhaiyang.redpacket.R;
 import com.yuhaiyang.redpacket.constant.Config;
-import com.yuhaiyang.redpacket.job.IAccessbilityJob;
-import com.yuhaiyang.redpacket.job.IStatusBarNotification;
-import com.yuhaiyang.redpacket.job.WechatAccessbilityJob;
+import com.yuhaiyang.redpacket.job.accessbility.IAccessbilityJob;
+import com.yuhaiyang.redpacket.job.accessbility.WechatAccessbilityJob;
+import com.yuhaiyang.redpacket.job.notification.IStatusBarNotification;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -45,21 +45,85 @@ import java.util.List;
  */
 public class RedPacketService extends AccessibilityService {
 
-    private static final String TAG = "QiangHongBao";
+    private static final String TAG = "RedPacketService";
 
     private static final Class[] ACCESSBILITY_JOBS = {
             WechatAccessbilityJob.class,
     };
 
-    private static RedPacketService service;
+    private static RedPacketService sInstance;
 
     private List<IAccessbilityJob> mAccessbilityJobs;
     private HashMap<String, IAccessbilityJob> mPkgAccessbilityJobMap;
 
+    /**
+     * 接收通知栏事件
+     */
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR2)
+    public static void handeNotificationPosted(IStatusBarNotification notificationService) {
+        Log.i(TAG, "handeNotificationPosted");
+        if (notificationService == null) {
+            return;
+        }
+        if (sInstance == null || sInstance.mPkgAccessbilityJobMap == null) {
+            return;
+        }
+        String pack = notificationService.getPackageName();
+        IAccessbilityJob job = sInstance.mPkgAccessbilityJobMap.get(pack);
+        if (job == null) {
+            return;
+        }
+        job.onNotificationPosted(notificationService);
+    }
+
+    /**
+     * 判断当前服务是否正在运行
+     */
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
+    public static boolean isRunning() {
+        if (sInstance == null) {
+            return false;
+        }
+        AccessibilityManager accessibilityManager = (AccessibilityManager) sInstance.getSystemService(Context.ACCESSIBILITY_SERVICE);
+        AccessibilityServiceInfo info = sInstance.getServiceInfo();
+        if (info == null) {
+            return false;
+        }
+        List<AccessibilityServiceInfo> list = accessibilityManager.getEnabledAccessibilityServiceList(AccessibilityServiceInfo.FEEDBACK_GENERIC);
+        Iterator<AccessibilityServiceInfo> iterator = list.iterator();
+
+        boolean isConnect = false;
+        while (iterator.hasNext()) {
+            AccessibilityServiceInfo i = iterator.next();
+            if (i.getId().equals(info.getId())) {
+                isConnect = true;
+                break;
+            }
+        }
+
+        return isConnect;
+    }
+
+    /**
+     * 快速读取通知栏服务是否启动
+     */
+    public static boolean isNotificationServiceRunning() {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR2) {
+            return false;
+        }
+        //部份手机没有NotificationService服务
+        try {
+            return NotificationService.isRunning();
+        } catch (Throwable t) {
+            Log.i(TAG, "isNotificationServiceRunning: t = " + t);
+        }
+        return false;
+    }
+
     @Override
     public void onCreate() {
         super.onCreate();
-
+        Log.d(TAG, "onCreate");
         mAccessbilityJobs = new ArrayList<>();
         mPkgAccessbilityJobMap = new HashMap<>();
 
@@ -82,7 +146,7 @@ public class RedPacketService extends AccessibilityService {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        Log.d(TAG, "qianghongbao service destory");
+        Log.d(TAG, "onDestroy");
         if (mPkgAccessbilityJobMap != null) {
             mPkgAccessbilityJobMap.clear();
         }
@@ -93,7 +157,7 @@ public class RedPacketService extends AccessibilityService {
             mAccessbilityJobs.clear();
         }
 
-        service = null;
+        sInstance = null;
         mAccessbilityJobs = null;
         mPkgAccessbilityJobMap = null;
         //发送广播，已经断开辅助服务
@@ -103,97 +167,32 @@ public class RedPacketService extends AccessibilityService {
 
     @Override
     public void onInterrupt() {
-        Log.d(TAG, "qianghongbao service interrupt");
-        YToast.makeText(this, "中断抢红包服务", Toast.LENGTH_SHORT).show();
+        Log.d(TAG, "onInterrupt");
+        YToast.makeText(this, R.string.interrupt_grap_service, Toast.LENGTH_SHORT).show();
     }
 
     @Override
     protected void onServiceConnected() {
         super.onServiceConnected();
-        service = this;
+        Log.d(TAG, "onServiceConnected");
+        sInstance = this;
         //发送广播，已经连接上了 通知UI更新界面
         Intent intent = new Intent(Config.ACTION_QIANGHONGBAO_SERVICE_CONNECT);
         sendBroadcast(intent);
-        YToast.makeText(this, "已连接抢红包服务", Toast.LENGTH_SHORT).show();
+        YToast.makeText(this, R.string.connected_grap_service, Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void onAccessibilityEvent(AccessibilityEvent event) {
-        if (BuildConfig.DEBUG) {
-            Log.d(TAG, "事件--->" + event);
-        }
+        Log.d(TAG, "onAccessibilityEvent -->" + event);
         String eventPackage = String.valueOf(event.getPackageName());
-        if (mAccessbilityJobs != null && !mAccessbilityJobs.isEmpty()) {
+        if (mAccessbilityJobs != null) {
             for (IAccessbilityJob job : mAccessbilityJobs) {
                 if (TextUtils.equals(eventPackage, job.getTargetPackageName()) && job.isEnable()) {
                     job.onReceiveJob(event);
                 }
             }
         }
-    }
-
-    /**
-     * 接收通知栏事件
-     */
-    @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR2)
-    public static void handeNotificationPosted(IStatusBarNotification notificationService) {
-        if (notificationService == null) {
-            return;
-        }
-        if (service == null || service.mPkgAccessbilityJobMap == null) {
-            return;
-        }
-        String pack = notificationService.getPackageName();
-        IAccessbilityJob job = service.mPkgAccessbilityJobMap.get(pack);
-        if (job == null) {
-            return;
-        }
-        job.onNotificationPosted(notificationService);
-    }
-
-    /**
-     * 判断当前服务是否正在运行
-     */
-    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
-    public static boolean isRunning() {
-        if (service == null) {
-            return false;
-        }
-        AccessibilityManager accessibilityManager = (AccessibilityManager) service.getSystemService(Context.ACCESSIBILITY_SERVICE);
-        AccessibilityServiceInfo info = service.getServiceInfo();
-        if (info == null) {
-            return false;
-        }
-        List<AccessibilityServiceInfo> list = accessibilityManager.getEnabledAccessibilityServiceList(AccessibilityServiceInfo.FEEDBACK_GENERIC);
-        Iterator<AccessibilityServiceInfo> iterator = list.iterator();
-
-        boolean isConnect = false;
-        while (iterator.hasNext()) {
-            AccessibilityServiceInfo i = iterator.next();
-            if (i.getId().equals(info.getId())) {
-                isConnect = true;
-                break;
-            }
-        }
-        if (!isConnect) {
-            return false;
-        }
-        return true;
-    }
-
-    /**
-     * 快速读取通知栏服务是否启动
-     */
-    public static boolean isNotificationServiceRunning() {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR2) {
-            return false;
-        }
-        //部份手机没有NotificationService服务
-        try {
-            return RedPacketNotificationService.isRunning();
-        } catch (Throwable t) {
-        }
-        return false;
     }
 
 

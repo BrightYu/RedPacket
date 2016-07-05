@@ -60,6 +60,52 @@ public class MainActivity extends RedPacketActivity implements View.OnClickListe
 
     private WeChatManager mWeChatManager;
     private NotificationManager mNotificationManager;
+    private DrawerLayout.DrawerListener mDrawerListener = new DrawerLayout.DrawerListener() {
+        @Override
+        public void onDrawerSlide(View drawerView, float slideOffset) {
+            mArrowDrawable.setProgress(slideOffset);
+        }
+
+        @Override
+        public void onDrawerOpened(View drawerView) {
+
+        }
+
+        @Override
+        public void onDrawerClosed(View drawerView) {
+
+        }
+
+        @Override
+        public void onDrawerStateChanged(int newState) {
+
+        }
+    };
+    private BroadcastReceiver mConnectReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (isFinishing()) {
+                Log.i(TAG, "onReceive: finishing just return");
+                return;
+            }
+            String action = intent.getAction();
+            Log.d(TAG, "onReceive: action = " + action);
+
+            if (Config.ACTION_QIANGHONGBAO_SERVICE_CONNECT.equals(action)) {
+                if (mTipsDialog != null) {
+                    mTipsDialog.dismiss();
+                }
+            } else if (Config.ACTION_QIANGHONGBAO_SERVICE_DISCONNECT.equals(action)) {
+                showTipDialog();
+            } else if (Config.ACTION_NOTIFY_SERVICE_CONNECT.equals(action)) {
+                mNotificationChangeByUser = false;
+                updateNotifyControl();
+            } else if (Config.ACTION_NOTIFY_SERVICE_DISCONNECT.equals(action)) {
+                mNotificationChangeByUser = false;
+                updateNotifyControl();
+            }
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,7 +116,6 @@ public class MainActivity extends RedPacketActivity implements View.OnClickListe
         mWeChatManager = WeChatManager.getInstance(this);
         mNotificationManager = NotificationManager.getInstance(this);
     }
-
 
     @Override
     protected void initViews() {
@@ -103,7 +148,6 @@ public class MainActivity extends RedPacketActivity implements View.OnClickListe
         View mentNotify = findViewById(R.id.menu_notify);
         mentNotify.setOnClickListener(this);
     }
-
 
     @Override
     protected void onResume() {
@@ -158,7 +202,6 @@ public class MainActivity extends RedPacketActivity implements View.OnClickListe
                 break;
         }
     }
-
 
     @Override
     public void onLeftClick(View v) {
@@ -283,59 +326,10 @@ public class MainActivity extends RedPacketActivity implements View.OnClickListe
         IntentFilter filter = new IntentFilter();
         filter.addAction(Config.ACTION_QIANGHONGBAO_SERVICE_CONNECT);
         filter.addAction(Config.ACTION_QIANGHONGBAO_SERVICE_DISCONNECT);
-        filter.addAction(Config.ACTION_NOTIFY_ERVICE_DISCONNECT);
+        filter.addAction(Config.ACTION_NOTIFY_SERVICE_DISCONNECT);
         filter.addAction(Config.ACTION_NOTIFY_SERVICE_CONNECT);
         registerReceiver(mConnectReceiver, filter);
     }
-
-    private DrawerLayout.DrawerListener mDrawerListener = new DrawerLayout.DrawerListener() {
-        @Override
-        public void onDrawerSlide(View drawerView, float slideOffset) {
-            mArrowDrawable.setProgress(slideOffset);
-        }
-
-        @Override
-        public void onDrawerOpened(View drawerView) {
-
-        }
-
-        @Override
-        public void onDrawerClosed(View drawerView) {
-
-        }
-
-        @Override
-        public void onDrawerStateChanged(int newState) {
-
-        }
-    };
-
-
-    private BroadcastReceiver mConnectReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            if (isFinishing()) {
-                Log.i(TAG, "onReceive: finishing just return");
-                return;
-            }
-            String action = intent.getAction();
-            Log.d(TAG, "onReceive: action = " + action);
-
-            if (Config.ACTION_QIANGHONGBAO_SERVICE_CONNECT.equals(action)) {
-                if (mTipsDialog != null) {
-                    mTipsDialog.dismiss();
-                }
-            } else if (Config.ACTION_QIANGHONGBAO_SERVICE_DISCONNECT.equals(action)) {
-                showTipDialog();
-            } else if (Config.ACTION_NOTIFY_SERVICE_CONNECT.equals(action)) {
-                mNotificationChangeByUser = false;
-                updateNotifyControl();
-            } else if (Config.ACTION_NOTIFY_ERVICE_DISCONNECT.equals(action)) {
-                mNotificationChangeByUser = false;
-                updateNotifyControl();
-            }
-        }
-    };
 
 
 }

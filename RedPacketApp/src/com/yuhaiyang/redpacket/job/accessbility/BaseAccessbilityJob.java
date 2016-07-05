@@ -14,17 +14,25 @@
  * limitations under the License.
  */
 
-package com.yuhaiyang.redpacket.constant;
+package com.yuhaiyang.redpacket.job.accessbility;
 
-public class Config {
-    /**
-     * 抢红包服务
-     */
-    public static final String ACTION_QIANGHONGBAO_SERVICE_DISCONNECT = "com.yuhaiyang.redpacket.ACCESSBILITY_DISCONNECT";
-    public static final String ACTION_QIANGHONGBAO_SERVICE_CONNECT = "com.yuhaiyang.redpacket.ACCESSBILITY_CONNECT";
-    /**
-     * 抢红包监听服务
-     */
-    public static final String ACTION_NOTIFY_SERVICE_DISCONNECT = "com.yuhaiyang.redpacket.NOTIFY_LISTENER_DISCONNECT";
-    public static final String ACTION_NOTIFY_SERVICE_CONNECT = "com.yuhaiyang.redpacket.NOTIFY_LISTENER_CONNECT";
+import android.content.Context;
+
+import com.yuhaiyang.redpacket.ui.service.RedPacketService;
+
+public abstract class BaseAccessbilityJob implements IAccessbilityJob {
+
+    protected Context mContext;
+    private RedPacketService mRedPacketService;
+
+    @Override
+    public void onCreateJob(RedPacketService service) {
+        mRedPacketService = service;
+        mContext = service.getApplicationContext();
+    }
+
+
+    public RedPacketService getService() {
+        return mRedPacketService;
+    }
 }

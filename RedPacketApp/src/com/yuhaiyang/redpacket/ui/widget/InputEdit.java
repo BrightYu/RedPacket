@@ -109,13 +109,6 @@ public class InputEdit extends FrameLayout implements View.OnClickListener, View
         }
     }
 
-    public void setInputText(String text) {
-        mInputView.setText(text);
-        if (!TextUtils.isEmpty(text)) {
-            mInputView.setSelection(text.length());
-        }
-    }
-
     protected void setCurrentView() {
         LayoutInflater inflater = LayoutInflater.from(getContext());
         inflater.inflate(R.layout.widget_input_edit, this, true);
@@ -133,7 +126,6 @@ public class InputEdit extends FrameLayout implements View.OnClickListener, View
                 break;
         }
     }
-
 
     public void hideInput() {
         mInputMethodManager.hideSoftInputFromWindow(mInputView.getWindowToken(), 0);
@@ -183,6 +175,13 @@ public class InputEdit extends FrameLayout implements View.OnClickListener, View
 
     public String getInputText() {
         return mInputView.getText().toString().trim();
+    }
+
+    public void setInputText(String text) {
+        mInputView.setText(text);
+        if (!TextUtils.isEmpty(text)) {
+            mInputView.setSelection(text.length());
+        }
     }
 
     @Override

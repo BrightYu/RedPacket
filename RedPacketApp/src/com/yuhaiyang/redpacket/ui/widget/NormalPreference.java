@@ -18,7 +18,6 @@ package com.yuhaiyang.redpacket.ui.widget;
 
 import android.content.Context;
 import android.content.res.TypedArray;
-import android.graphics.drawable.GradientDrawable;
 import android.support.annotation.StringRes;
 import android.support.v7.widget.AppCompatTextView;
 import android.text.TextUtils;
@@ -26,7 +25,6 @@ import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -123,14 +121,6 @@ public class NormalPreference extends LinearLayout {
         return mSubTitleView;
     }
 
-    public String getSubText(){
-        return mSubTitleView.getText().toString();
-    }
-
-    public void setSubTitle(@StringRes int subTitle) {
-        setSubTitle(getContext().getString(subTitle));
-    }
-
     public void setSubTitle(String subTitle) {
         mSubTitleView.setText(subTitle);
         if (TextUtils.isEmpty(subTitle)) {
@@ -138,6 +128,14 @@ public class NormalPreference extends LinearLayout {
         } else {
             mSubTitleView.setVisibility(VISIBLE);
         }
+    }
+
+    public String getSubText() {
+        return mSubTitleView.getText().toString();
+    }
+
+    public void setSubTitle(@StringRes int subTitle) {
+        setSubTitle(getContext().getString(subTitle));
     }
 
     private int getDefaultTitleColor() {

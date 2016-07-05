@@ -41,4 +41,7 @@
     <string name="tip_notif_can_not_open">该功能只支持安卓4.3以上的系统</string>
     <string name="tip_delay_time">提示：设置延迟时间可以防止封号</string>
     <string name="link_delay_unit"><xliff:g id="date">%s</xliff:g> 毫秒</string>
+    <string name="interrupt_grap_service">抢红包服务已经中断</string>
+    <string name="connected_grap_service">已经连接上抢红包服务</string>
+    <string name="view_version_info">微信版本信息</string>
 </resources>

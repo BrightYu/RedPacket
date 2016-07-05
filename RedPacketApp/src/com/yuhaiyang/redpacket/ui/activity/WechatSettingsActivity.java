@@ -1,12 +1,12 @@
 /**
  * Copyright (C) 2016 The yuhaiyang Android Source Project
- * <p/>
+ * <p>
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * <p/>
+ * <p>
  * http://www.apache.org/licenses/LICENSE-2.0
- * <p/>
+ * <p>
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -39,11 +39,10 @@ import java.util.List;
 
 public class WechatSettingsActivity extends RedPacketActivity implements View.OnClickListener {
     private static final String TAG = "WechatSettingsActivity";
+    private final static int REQUEST_DELAY_TIME = 1;
     private NormalPreference mGrapMode;
     private NormalPreference mDelayTime;
     private NormalPreference mOpenAfterAtion;
-
-    private final static int REQUEST_DELAY_TIME = 1;
     private WeChatManager mWeChatManager;
 
     private List<ISelect> mGrapModes;
@@ -75,6 +74,8 @@ public class WechatSettingsActivity extends RedPacketActivity implements View.On
         mOpenAfterAtion = (NormalPreference) findViewById(R.id.open_after_doing);
         mOpenAfterAtion.setOnClickListener(this);
 
+        View info = findViewById(R.id.view_version_info);
+        info.setOnClickListener(this);
     }
 
     @Override
@@ -99,7 +100,9 @@ public class WechatSettingsActivity extends RedPacketActivity implements View.On
             case R.id.open_after_doing:
                 showOpenAfterActionDialog();
                 break;
-
+            case R.id.view_version_info:
+                dialog(String.valueOf(mWeChatManager.getWechatVersion()));
+                break;
         }
     }
 
@@ -161,7 +164,7 @@ public class WechatSettingsActivity extends RedPacketActivity implements View.On
         if (mGetHongBaoEvents == null) {
             mGetHongBaoEvents = new ArrayList<>();
             mGetHongBaoEvents.add(new WeChatSelect(WeChat.Configure.GET_AFTER_HONGBAO_EVENT_OPEN, getString(R.string.get_after_mode_open_description)));
-            mGetHongBaoEvents.add(new WeChatSelect(WeChat.Configure.GET_AFTER_HONGBAO_EVENT_SEE, getString(R.string.get_after_mode_see_description)));
+            //mGetHongBaoEvents.add(new WeChatSelect(WeChat.Configure.GET_AFTER_HONGBAO_EVENT_SEE, getString(R.string.get_after_mode_see_description)));
             mGetHongBaoEvents.add(new WeChatSelect(WeChat.Configure.GET_AFTER_HONGBAO_EVENT_NONE, getString(R.string.get_after_mode_none_description)));
         }
         return mGetHongBaoEvents;

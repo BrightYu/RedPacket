@@ -47,6 +47,27 @@ public class SelectDialog extends Dialog {
     private CallBack mCallBack;
     private String mTitleString;
     private int mSelectItem = -1;
+    private TopBar.OnTopBarListener mTopBarListener = new TopBar.OnTopBarListener() {
+        @Override
+        public void onLeftClick(View v) {
+            dismiss();
+        }
+
+        @Override
+        public void onRightClick(View v) {
+            if (mCallBack != null) {
+                int position = mListView.getCheckedItemPosition();
+                ISelect select = mAdapter.getItem(position);
+                mCallBack.select(select);
+            }
+            dismiss();
+        }
+
+        @Override
+        public void onTitleClick(View v) {
+
+        }
+    };
 
     public SelectDialog(Context context) {
         super(context, R.style.Dialog_Bottom);
@@ -101,7 +122,6 @@ public class SelectDialog extends Dialog {
         Log.i(TAG, "setData: mSelectItem = " + mSelectItem);
     }
 
-
     @Override
     public void show() {
         super.show();
@@ -111,29 +131,6 @@ public class SelectDialog extends Dialog {
         lp.gravity = Gravity.BOTTOM;
         window.setAttributes(lp);
     }
-
-
-    private TopBar.OnTopBarListener mTopBarListener = new TopBar.OnTopBarListener() {
-        @Override
-        public void onLeftClick(View v) {
-            dismiss();
-        }
-
-        @Override
-        public void onRightClick(View v) {
-            if (mCallBack != null) {
-                int position = mListView.getCheckedItemPosition();
-                ISelect select = mAdapter.getItem(position);
-                mCallBack.select(select);
-            }
-            dismiss();
-        }
-
-        @Override
-        public void onTitleClick(View v) {
-
-        }
-    };
 
     public void setCallBack(CallBack callBack) {
         mCallBack = callBack;

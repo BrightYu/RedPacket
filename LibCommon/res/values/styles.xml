@@ -85,10 +85,10 @@
         <item name="android:textAppearance">@style/TextAppearance.DialogMessage</item>
         <item name="android:paddingLeft">@dimen/dp_20</item>
         <item name="android:paddingRight">@dimen/dp_20</item>
-        <item name="android:paddingBottom">@dimen/dp_25</item>
-        <item name="android:paddingTop">@dimen/dp_8</item>
+        <item name="android:paddingBottom">@dimen/dp_22</item>
+        <item name="android:paddingTop">@dimen/dp_15</item>
         <item name="android:minHeight">@dimen/dp_60</item>
-        <item name="android:gravity">center_horizontal</item>
+        <item name="android:gravity">center</item>
     </style>
 
     <style name="BaseDialog.Button">

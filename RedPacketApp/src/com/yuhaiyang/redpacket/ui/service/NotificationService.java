@@ -17,25 +17,30 @@
 package com.yuhaiyang.redpacket.ui.service;
 
 import android.annotation.TargetApi;
-import android.app.Notification;
 import android.content.Intent;
 import android.os.Build;
 import android.service.notification.NotificationListenerService;
 import android.service.notification.StatusBarNotification;
 import android.util.Log;
 
-import com.yuhaiyang.redpacket.BuildConfig;
 import com.yuhaiyang.redpacket.constant.Config;
-import com.yuhaiyang.redpacket.job.IStatusBarNotification;
+import com.yuhaiyang.redpacket.job.notification.BaseStatusBarNotification;
 import com.yuhaiyang.redpacket.manager.NotificationManager;
 
 
 @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR2)
-public class RedPacketNotificationService extends NotificationListenerService {
+public class NotificationService extends NotificationListenerService {
     private static final String TAG = "NotificationService";
 
-    private static RedPacketNotificationService service;
+    private static NotificationService sInstance;
     private NotificationManager mNotificationManager;
+
+    /**
+     * 是否启动通知栏监听
+     */
+    public static boolean isRunning() {
+        return (sInstance != null);
+    }
 
     @Override
     public void onCreate() {
@@ -48,23 +53,13 @@ public class RedPacketNotificationService extends NotificationListenerService {
 
     @Override
     public void onNotificationPosted(final StatusBarNotification sbn) {
-        if (BuildConfig.DEBUG) {
-            Log.i(TAG, "onNotificationRemoved");
-        }
+        Log.i(TAG, "onNotificationPosted");
+
         if (!mNotificationManager.isEnabled()) {
             return;
         }
-        RedPacketService.handeNotificationPosted(new IStatusBarNotification() {
-            @Override
-            public String getPackageName() {
-                return sbn.getPackageName();
-            }
-
-            @Override
-            public Notification getNotification() {
-                return sbn.getNotification();
-            }
-        });
+        BaseStatusBarNotification notification = new BaseStatusBarNotification(sbn);
+        RedPacketService.handeNotificationPosted(notification);
     }
 
     @Override
@@ -72,9 +67,7 @@ public class RedPacketNotificationService extends NotificationListenerService {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             super.onNotificationRemoved(sbn);
         }
-        if (BuildConfig.DEBUG) {
-            Log.i(TAG, "onNotificationRemoved");
-        }
+        Log.i(TAG, "onNotificationRemoved");
     }
 
     @Override
@@ -84,7 +77,7 @@ public class RedPacketNotificationService extends NotificationListenerService {
         }
 
         Log.i(TAG, "onListenerConnected");
-        service = this;
+        sInstance = this;
         //发送广播，已经连接上了
         Intent intent = new Intent(Config.ACTION_NOTIFY_SERVICE_CONNECT);
         sendBroadcast(intent);
@@ -94,19 +87,9 @@ public class RedPacketNotificationService extends NotificationListenerService {
     public void onDestroy() {
         super.onDestroy();
         Log.i(TAG, "onDestroy");
-        service = null;
-        //发送广播，已经连接上了
-        Intent intent = new Intent(Config.ACTION_NOTIFY_ERVICE_DISCONNECT);
+        sInstance = null;
+        //发送广播，已经断开连接
+        Intent intent = new Intent(Config.ACTION_NOTIFY_SERVICE_DISCONNECT);
         sendBroadcast(intent);
-    }
-
-    /**
-     * 是否启动通知栏监听
-     */
-    public static boolean isRunning() {
-        if (service == null) {
-            return false;
-        }
-        return true;
     }
 }

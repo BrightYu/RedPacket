@@ -10,6 +10,19 @@ import java.util.List;
 
 public final class AccessibilityHelper {
 
+    private static final Field sSourceNodeField;
+
+    static {
+        Field field = null;
+        try {
+            field = AccessibilityNodeInfo.class.getDeclaredField("mSourceNodeId");
+            field.setAccessible(true);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        sSourceNodeField = field;
+    }
+
     private AccessibilityHelper() {
     }
 
@@ -80,19 +93,6 @@ public final class AccessibilityHelper {
             return nodeInfo;
         }
         return findParentNodeInfosByClassName(nodeInfo.getParent(), className);
-    }
-
-    private static final Field sSourceNodeField;
-
-    static {
-        Field field = null;
-        try {
-            field = AccessibilityNodeInfo.class.getDeclaredField("mSourceNodeId");
-            field.setAccessible(true);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        sSourceNodeField = field;
     }
 
     public static long getSourceNodeId(AccessibilityNodeInfo nodeInfo) {

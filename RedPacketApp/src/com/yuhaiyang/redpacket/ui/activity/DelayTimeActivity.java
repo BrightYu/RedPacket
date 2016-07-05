@@ -20,7 +20,6 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.graphics.drawable.DrawerArrowDrawable;
-import android.util.Log;
 import android.view.View;
 
 import com.bright.common.widget.TopBar;
