@@ -21,9 +21,12 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.Window;
 
+import com.bright.common.utils.DataCleanUtils;
+import com.bright.common.utils.PackagesUtils;
 import com.yuhaiyang.redpacket.ui.activity.base.RedPacketActivity;
 
 /**
@@ -40,6 +43,11 @@ public class SplashActivity extends RedPacketActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        final String versionName = PackagesUtils.getVersionName(this);
+        if (isFirstEnterThisVerison() && TextUtils.equals(versionName, "0.0.2")) {
+            DataCleanUtils.cleanApplicationData(this);
+        }
+        
         mHandler = new RecycleHandler();
         mHandler.sendEmptyMessageDelayed(GO_TO_NEXT, 1500);
     }
