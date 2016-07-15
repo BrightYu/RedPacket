@@ -74,7 +74,7 @@ android {
                     BAIDU_STATISTICS_CHANNEL: DEVELOP_BAIDU_STATISTICS_CHANNEL]
         }
         release {
-            minifyEnabled false
+            minifyEnabled true
             shrinkResources true
             signingConfig signingConfigs.release
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'

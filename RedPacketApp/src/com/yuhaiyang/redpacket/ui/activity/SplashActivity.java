@@ -47,7 +47,7 @@ public class SplashActivity extends RedPacketActivity {
         if (isFirstEnterThisVerison() && TextUtils.equals(versionName, "0.0.2")) {
             DataCleanUtils.cleanApplicationData(this);
         }
-        
+
         mHandler = new RecycleHandler();
         mHandler.sendEmptyMessageDelayed(GO_TO_NEXT, 1500);
     }
